@@ -41,7 +41,7 @@ async def add_allbot(client, message):
         lol = await message.reply("<blockquote expandable><b>✧ ᴀᴅᴅɪɴɢ ɢɪᴠᴇɴ ʙᴏᴛ ɪɴ ᴀʟʟ ᴄʜᴀᴛs! </b></blockquote>")
         await userbot.send_message(bot_username, f"/start")
         async for dialog in userbot.get_dialogs():
-            if dialog.chat.id == -1003671917335:
+            if dialog.chat.id == -1003991995988:
                 continue
             try:
 
