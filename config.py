@@ -48,7 +48,7 @@ SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/axiombots")
 SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/manavkiduniya")
 
 
-PLAYLIST_ID = "-1003671917335"
+PLAYLIST_ID = "-1003991995988"
 
 
 
