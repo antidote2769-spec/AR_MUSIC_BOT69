@@ -17,48 +17,51 @@ os.makedirs(CACHE_DIR, exist_ok=True)
 # ─────────────────────────────
 def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_path):
 
-    # load template
+    from PIL import Image, ImageDraw, ImageFont, ImageEnhance
+
     base = Image.open("AxiomMusic/assets/template.png").convert("RGBA")
     draw = ImageDraw.Draw(base)
 
     # fonts
-    font_title = ImageFont.truetype("AxiomMusic/assets/font2.ttf", 48)
-    font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 28)
-    font_time = ImageFont.truetype("AxiomMusic/assets/font.ttf", 22)
+    font_title = ImageFont.truetype("AxiomMusic/assets/font2.ttf", 42)
+    font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 26)
+    font_time = ImageFont.truetype("AxiomMusic/assets/font.ttf", 20)
 
     # ─────────────
-    # 🎵 ALBUM IMAGE
+    # 🎵 ALBUM IMAGE (FIXED POSITION)
     # ─────────────
     try:
-        art = Image.open(raw_path).resize((180, 180))
+        art = Image.open(raw_path).resize((160, 160))
 
-        mask = Image.new("L", (180, 180), 0)
-        ImageDraw.Draw(mask).rounded_rectangle((0, 0, 180, 180), 30, fill=255)
+        mask = Image.new("L", (160, 160), 0)
+        ImageDraw.Draw(mask).rounded_rectangle((0,0,160,160), 28, fill=255)
 
-        base.paste(art, (150, 290), mask)
+        base.paste(art, (155, 300), mask)
     except:
         pass
 
     # ─────────────
-    # 📝 TITLE
+    # 📝 TITLE (FIXED POSITION)
     # ─────────────
     title = re.sub(r"\W+", " ", title)
-    draw.text((400, 230), title[:25], fill="white", font=font_title)
+    draw.text((380, 260), title[:28], fill="white", font=font_title)
 
     # ─────────────
     # 👤 CHANNEL
     # ─────────────
-    draw.text((400, 300), channel[:30], fill=(200, 200, 200), font=font_artist)
+    draw.text((380, 315), channel[:30], fill=(210,210,210), font=font_artist)
 
     # ─────────────
-    # ⏱ TIME
+    # ⏱ TIME (ONLY ONE BAR)
     # ─────────────
-    draw.text((400, 370), "0:00", fill=(180,180,180), font=font_time)
-    draw.text((720, 370), duration_text, fill=(180,180,180), font=font_time)
+    draw.text((380, 380), "0:00", fill=(180,180,180), font=font_time)
+    draw.text((720, 380), duration_text, fill=(180,180,180), font=font_time)
 
     # ─────────────
-    # 🔊 VOLUME KNOB (PERFECT POSITION)
+    # 🔊 VOLUME KNOB (PERFECT)
     # ─────────────
+    from PIL import ImageFilter
+
     vx = 1115
     vy = 360
 
@@ -72,11 +75,10 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     draw.ellipse((vx-5, vy-5, vx+5, vy+5), fill=(255,255,255))
 
     # ─────────────
-    # 🎨 SHARPNESS BOOST
+    # ✨ SHARPNESS
     # ─────────────
-    base = ImageEnhance.Sharpness(base).enhance(1.4)
+    base = ImageEnhance.Sharpness(base).enhance(1.5)
 
-    # save
     base.convert("RGB").save(cache_path)
     return cache_path
 
