@@ -52,7 +52,7 @@ class Call(PyTgCalls):
             name="AxiomMusic1",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
-            session_string=str(config.STRING1),
+            _string=str(config.STRING1),
         )
         self.one = PyTgCalls(self.userbot1, cache_duration=100)
 
@@ -60,7 +60,7 @@ class Call(PyTgCalls):
             name="AxiomMusic2",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
-            session_string=str(config.STRING2),
+            _string=str(config.STRING2),
         )
         self.two = PyTgCalls(self.userbot2, cache_duration=100)
 
@@ -68,7 +68,7 @@ class Call(PyTgCalls):
             name="AxiomMusic3",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
-            session_string=str(config.STRING3),
+            _string=str(config.STRING3),
         )
         self.three = PyTgCalls(self.userbot3, cache_duration=100)
 
@@ -76,7 +76,7 @@ class Call(PyTgCalls):
             name="AxiomMusic4",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
-            session_string=str(config.STRING4),
+            _string=str(config.STRING4),
         )
         self.four = PyTgCalls(self.userbot4, cache_duration=100)
 
@@ -84,7 +84,7 @@ class Call(PyTgCalls):
             name="AxiomMusic5",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
-            session_string=str(config.STRING5),
+            _string=str(config.STRING5),
         )
         self.five = PyTgCalls(self.userbot5, cache_duration=100)
 
@@ -217,7 +217,7 @@ class Call(PyTgCalls):
         if str(db[chat_id][0]["file"]) == str(file_path):
             await self._play_on_assistant(assistant, chat_id, stream)
         else:
-            raise AssistantErr("Umm")
+            raise AssistantErr("Ufff")
         if str(db[chat_id][0]["file"]) == str(file_path):
             exis = (playing[0]).get("old_dur")
             if not exis:
@@ -507,6 +507,7 @@ class Call(PyTgCalls):
                         if str(streamtype) == "audio"
                         else config.TELEGRAM_VIDEO_URL
                     ),
+                    has_spoiler=True,
                     caption=_["stream_1"].format(
                         config.SUPPORT_CHAT, title[:23], check[0]["dur"], user
                     ),
@@ -519,6 +520,7 @@ class Call(PyTgCalls):
                 run = await app.send_photo(
                     chat_id=original_chat_id,
                     photo=config.SOUNCLOUD_IMG_URL,
+                    has_spoiler=True,
                     caption=_["stream_1"].format(
                         config.SUPPORT_CHAT, title[:23], check[0]["dur"], user
                     ),
