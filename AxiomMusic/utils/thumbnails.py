@@ -7,98 +7,82 @@ from py_yt import VideosSearch
 from config import YOUTUBE_IMG_URL
 from AxiomMusic import app
 
+# cache folder
 CACHE_DIR = "cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 
 # ─────────────────────────────
-# 🎨 THUMBNAIL RENDER
+# 🎨 THUMBNAIL RENDER (FIXED POSITION)
 # ─────────────────────────────
 def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_path):
+
+    from PIL import Image, ImageDraw, ImageFont, ImageEnhance
 
     base = Image.open("AxiomMusic/assets/template.png").convert("RGBA")
     draw = ImageDraw.Draw(base)
 
     # fonts
-    font_title = ImageFont.truetype("AxiomMusic/assets/font2.ttf", 48)
-    font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 30)
-    font_time = ImageFont.truetype("AxiomMusic/assets/font.ttf", 24)
+    font_title = ImageFont.truetype("AxiomMusic/assets/font2.ttf", 42)
+    font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 26)
+    font_time = ImageFont.truetype("AxiomMusic/assets/font.ttf", 20)
 
     # ─────────────
-    # 🎯 CENTER TEXT FUNCTION
-    # ─────────────
-    def center_text(text, font, x1, y1, x2, y2, color):
-        bbox = draw.textbbox((0, 0), text, font=font)
-        w = bbox[2] - bbox[0]
-        h = bbox[3] - bbox[1]
-
-        x = x1 + (x2 - x1 - w) // 2
-        y = y1 + (y2 - y1 - h) // 2
-
-        draw.text((x, y), text, fill=color, font=font)
-
-    # ─────────────
-    # 🎵 ALBUM IMAGE
+    # 🎵 ALBUM IMAGE (CENTERED IN BOX)
     # ─────────────
     try:
-        art = Image.open(raw_path).resize((160, 160))
+        # Size ko thoda bada kiya hai (180x180) taaki box bhara hua lage
+        art = Image.open(raw_path).resize((180, 180))
 
-        mask = Image.new("L", (160, 160), 0)
-        ImageDraw.Draw(mask).rounded_rectangle((0, 0, 160, 160), 30, fill=255)
+        mask = Image.new("L", (180, 180), 0)
+        # Rounded corners ke liye
+        ImageDraw.Draw(mask).rounded_rectangle((0, 0, 180, 180), 30, fill=255)
 
-        base.paste(art, (155, 300), mask)
-    except:
+        # Y-axis ko 300 se badha kar 342 kiya hai taaki niche aaye
+        # X-axis ko 145 rakha hai taaki box ke center mein rahe
+        base.paste(art, (145, 342), mask)
+    except Exception as e:
+        print(f"Error drawing art: {e}")
         pass
 
     # ─────────────
-    # 📝 TITLE (FIXED CENTER)
+    # 📝 TITLE (FIXED POSITION)
     # ─────────────
     title = re.sub(r"\W+", " ", title)
-
-    center_text(
-        title[:30],
-        font_title,
-        350, 150, 1400, 260,   # PERFECT POSITION
-        "white"
-    )
+    draw.text((380, 260), title[:28], fill="white", font=font_title)
 
     # ─────────────
     # 👤 CHANNEL
     # ─────────────
-    center_text(
-        channel[:35],
-        font_artist,
-        350, 240, 1400, 330,
-        (200, 200, 200)
-    )
+    draw.text((380, 315), channel[:30], fill=(210,210,210), font=font_artist)
 
     # ─────────────
-    # ⏱ TIME
+    # ⏱️ TIME (ONLY ONE BAR)
     # ─────────────
-    draw.text((400, 380), "0:00", fill=(200, 200, 200), font=font_time)
-    draw.text((1150, 380), duration_text, fill=(200, 200, 200), font=font_time)
+    draw.text((380, 380), "0:00", fill=(180,180,180), font=font_time)
+    draw.text((720, 380), duration_text, fill=(180,180,180), font=font_time)
 
     # ─────────────
-    # 🔊 VOLUME DOT (FIXED POSITION)
+    # 🔊 VOLUME KNOB
     # ─────────────
+    from PIL import ImageFilter
+
     vx = 1115
     vy = 360
 
-    glow = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    glow = Image.new("RGBA", base.size, (0,0,0,0))
     gdraw = ImageDraw.Draw(glow)
-    gdraw.ellipse((vx-14, vy-14, vx+14, vy+14), fill=(255, 255, 255, 90))
-
-    base = Image.alpha_composite(base, glow.filter(ImageFilter.GaussianBlur(10)))
+    gdraw.ellipse((vx-14, vy-14, vx+14, vy+14), fill=(255,255,255,100))
+    base = Image.alpha_composite(base, glow.filter(ImageFilter.GaussianBlur(8)))
 
     draw = ImageDraw.Draw(base)
-    draw.ellipse((vx-10, vy-10, vx+10, vy+10), fill=(220, 220, 220))
-    draw.ellipse((vx-5, vy-5, vx+5, vy+5), fill=(255, 255, 255))
+    draw.ellipse((vx-10, vy-10, vx+10, vy+10), fill=(200,200,200))
+    draw.ellipse((vx-5, vy-5, vx+5, vy+5), fill=(255,255,255))
 
     # ─────────────
-    # ✨ SHARP + CLEAN
+    # ✨ SHARPNESS & SAVE
     # ─────────────
-    base = ImageEnhance.Sharpness(base).enhance(1.8)
-    base = ImageEnhance.Contrast(base).enhance(1.1)
+    base = ImageEnhance.Sharpness(base).enhance(1.5)
 
     base.convert("RGB").save(cache_path)
     return cache_path
@@ -132,6 +116,7 @@ async def get_thumb(videoid: str, player_username: str = None):
     except Exception:
         return YOUTUBE_IMG_URL
 
+    # download thumbnail
     raw_path = os.path.join(CACHE_DIR, f"{videoid}.jpg")
 
     try:
@@ -145,10 +130,12 @@ async def get_thumb(videoid: str, player_username: str = None):
     except Exception:
         return YOUTUBE_IMG_URL
 
+    # render image
     result = _make_thumb(raw_path, title, channel, duration, player_username, cache_path)
 
     try:
-        os.remove(raw_path)
+        if os.path.exists(raw_path):
+            os.remove(raw_path)
     except:
         pass
 
