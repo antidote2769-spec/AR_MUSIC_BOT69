@@ -20,29 +20,32 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     template = Image.open("AxiomMusic/assets/template.png").convert("RGBA")
     WIDTH, HEIGHT = template.size
 
-    # ─────────────
-    # 🎨 BACKGROUND (BLURRED THUMB)
-    # ─────────────
-    try:
-        bg = Image.open(raw_path).convert("RGBA").resize((WIDTH, HEIGHT))
+   # ─────────────
+# 🎨 BACKGROUND (FINAL FIX)
+# ─────────────
+try:
+    bg = Image.open(raw_path).convert("RGBA").resize((WIDTH, HEIGHT))
 
-        # strong blur
-        bg = bg.filter(ImageFilter.GaussianBlur(50))
+    # strong blur
+    bg = bg.filter(ImageFilter.GaussianBlur(50))
 
-        # color enhance (song vibe)
-        bg = ImageEnhance.Color(bg).enhance(1.6)
+    # color enhance
+    bg = ImageEnhance.Color(bg).enhance(1.6)
 
-        # dark overlay (glass feel)
-        overlay = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 130))
-        bg = Image.alpha_composite(bg, overlay)
+    # dark overlay
+    overlay = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 130))
+    bg = Image.alpha_composite(bg, overlay)
 
-        # 🔥 FINAL BASE = blurred bg + template
-        base = Image.alpha_composite(bg, template)
+    # 🔥 IMPORTANT FIX (NEW BASE)
+    base = bg.copy()
 
-    except Exception as e:
-        print("BG ERROR:", e)
-        base = template
+    # 🔥 TEMPLATE KO UPAR LAGAO (THIS WAS MISSING PROPERLY)
+    base.paste(template, (0, 0), template)
 
+except Exception as e:
+    print("BG ERROR:", e)
+    base = template.copy()
+    
     draw = ImageDraw.Draw(base)
 
     # Fonts
