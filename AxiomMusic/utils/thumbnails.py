@@ -12,29 +12,26 @@ os.makedirs(CACHE_DIR, exist_ok=True)
 
 
 # ─────────────────────────────
-# 🎨 CLEAN THUMBNAIL RENDER
+# 🎨 THUMBNAIL RENDER
 # ─────────────────────────────
 def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_path):
 
-    # Load template
     base = Image.open("AxiomMusic/assets/template.png").convert("RGBA")
     WIDTH, HEIGHT = base.size
-
     draw = ImageDraw.Draw(base)
 
     # Fonts
-    font_title = ImageFont.truetype("AxiomMusic/assets/font2.ttf", 50)
-    font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 32)
-    font_time = ImageFont.truetype("AxiomMusic/assets/font.ttf", 26)
+    font_title = ImageFont.truetype("AxiomMusic/assets/font2.ttf", 46)
+    font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 30)
 
     # ─────────────
     # 🎨 BACKGROUND BLUR
     # ─────────────
     try:
         bg = Image.open(raw_path).convert("RGBA").resize((WIDTH, HEIGHT))
-        bg = bg.filter(ImageFilter.GaussianBlur(18))
+        bg = bg.filter(ImageFilter.GaussianBlur(16))
 
-        overlay = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 120))
+        overlay = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 110))
         bg = Image.alpha_composite(bg, overlay)
 
         base = Image.alpha_composite(bg, base)
@@ -44,20 +41,21 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     draw = ImageDraw.Draw(base)
 
     # ─────────────
-    # 🎵 ALBUM ART
+    # 🎵 ALBUM ART (SMALL + FIXED POSITION)
     # ─────────────
     try:
-        ART_SIZE = int(WIDTH * 0.18)
+        ART_SIZE = 180
 
         art = Image.open(raw_path).resize((ART_SIZE, ART_SIZE))
 
         mask = Image.new("L", (ART_SIZE, ART_SIZE), 0)
         ImageDraw.Draw(mask).rounded_rectangle(
-            (0, 0, ART_SIZE, ART_SIZE), 40, fill=255
+            (0, 0, ART_SIZE, ART_SIZE), 35, fill=255
         )
 
-        art_x = int(WIDTH * 0.07)
-        art_y = int(HEIGHT * 0.45)
+        # Position (adjust if needed)
+        art_x = 85
+        art_y = 355
 
         base.paste(art, (art_x, art_y), mask)
 
@@ -65,46 +63,54 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
         print("ART ERROR:", e)
 
     # ─────────────
-    # 📝 TEXT (FIXED SAFE ZONE)
+    # 📝 TITLE WRAP FIX
     # ─────────────
+    def wrap_text(text, font, max_width):
+        words = text.split()
+        lines = []
+        current = ""
+
+        for word in words:
+            test = current + " " + word if current else word
+            w, _ = draw.textsize(test, font=font)
+
+            if w <= max_width:
+                current = test
+            else:
+                lines.append(current)
+                current = word
+
+        if current:
+            lines.append(current)
+
+        return lines[:2]  # max 2 lines
+
     title = re.sub(r"\W+", " ", title)
 
-    text_x = int(WIDTH * 0.30)
-    title_y = int(HEIGHT * 0.45)
+    text_x = 340
+    text_y = 360
+    max_width = 650
 
-    draw.text((text_x, title_y), title[:40], fill="white", font=font_title)
-    draw.text((text_x, title_y + 70), channel[:35], fill=(200, 200, 200), font=font_artist)
+    lines = wrap_text(title, font_title, max_width)
 
-    # ─────────────
-    # ⏱️ TIME + PROGRESS BAR
-    # ─────────────
-    bar_x1 = text_x
-    bar_x2 = int(WIDTH * 0.88)
-    bar_y = int(HEIGHT * 0.68)
+    for i, line in enumerate(lines):
+        draw.text((text_x, text_y + i * 55), line, fill="white", font=font_title)
 
-    draw.text((bar_x1, bar_y + 20), "0:00", fill=(200, 200, 200), font=font_time)
-    draw.text((bar_x2 - 60, bar_y + 20), duration_text, fill=(200, 200, 200), font=font_time)
-
-    # bar bg
-    draw.line((bar_x1, bar_y, bar_x2, bar_y), fill=(120, 120, 120), width=5)
-
-    # progress (30%)
-    progress = int((bar_x2 - bar_x1) * 0.3)
-    draw.line((bar_x1, bar_y, bar_x1 + progress, bar_y), fill="white", width=5)
-
-    # knob
-    draw.ellipse(
-        (bar_x1 + progress - 7, bar_y - 7, bar_x1 + progress + 7, bar_y + 7),
-        fill="white",
+    # Channel name
+    draw.text(
+        (text_x, text_y + len(lines) * 55 + 10),
+        channel[:35],
+        fill=(200, 200, 200),
+        font=font_artist,
     )
 
     # ─────────────
-    # 🔊 VOLUME DOT
+    # ❌ REMOVED:
+    # - Progress bar
+    # - Duration text
+    # - Volume %
+    # (Template already has them)
     # ─────────────
-    vx = int(WIDTH * 0.92)
-    vy = int(HEIGHT * 0.42)
-
-    draw.ellipse((vx - 6, vy - 6, vx + 6, vy + 6), fill=(220, 220, 220))
 
     # ─────────────
     # ✨ FINAL TOUCH
