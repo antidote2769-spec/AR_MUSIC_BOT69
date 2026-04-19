@@ -113,52 +113,51 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     REG  = "AxiomMusic/assets/font.ttf"
     BOLD = "AxiomMusic/assets/font2.ttf"
 
-    f_title = _font(BOLD, 42)
+    f_title = _font(BOLD, 44)
     f_artist = _font(REG, 26)
     f_time = _font(REG, 20)
 
     # ───── BACKGROUND ─────
     base = Image.new("RGBA", (W, H), (235, 235, 235))
 
-    draw = ImageDraw.Draw(base)
-
-    # ───── CARD (CENTERED FIXED) ─────
-    cx, cy = 320, 220
+    # ───── CARD POSITION ─────
+    cx, cy = 320, 230
     CW, CH = 640, 260
 
-    # shadow
+    # ───── SHADOW ─────
     shadow = Image.new("RGBA", (W, H), (0,0,0,0))
     ImageDraw.Draw(shadow).rounded_rectangle(
-        (cx+10, cy+10, cx+CW+10, cy+CH+10),
-        radius=40,
-        fill=(0,0,0,120)
+        (cx+12, cy+12, cx+CW+12, cy+CH+12),
+        radius=45,
+        fill=(0,0,0,100)
     )
-    base = Image.alpha_composite(base, shadow.filter(ImageFilter.GaussianBlur(20)))
+    base = Image.alpha_composite(base, shadow.filter(ImageFilter.GaussianBlur(25)))
 
-    # card gradient
+    # ───── CARD (SMOOTH GRADIENT) ─────
     card = Image.new("RGBA", (CW, CH))
     cd = ImageDraw.Draw(card)
 
     for y in range(CH):
-        shade = int(70 - (y/CH)*30)
+        shade = int(75 - (y/CH)*35)
         cd.line([(0,y),(CW,y)], fill=(shade,shade,shade))
 
     mask = Image.new("L", (CW, CH), 0)
-    ImageDraw.Draw(mask).rounded_rectangle((0,0,CW,CH), radius=40, fill=255)
-
+    ImageDraw.Draw(mask).rounded_rectangle((0,0,CW,CH), radius=45, fill=255)
     base.paste(card, (cx, cy), mask)
 
     draw = ImageDraw.Draw(base)
 
-    # ───── VINYL (FIXED BEHIND CARD) ─────
-    vcx, vcy = cx + CW//2, cy - 60
+    # ───── VINYL DISC (REALISTIC) ─────
+    vcx, vcy = cx + CW//2, cy - 70
 
-    for r in range(120, 30, -8):
-        draw.ellipse((vcx-r, vcy-r, vcx+r, vcy+r), outline=(30,30,30), width=3)
+    for r in range(120, 20, -6):
+        col = 20 + (r % 20)
+        draw.ellipse((vcx-r, vcy-r, vcx+r, vcy+r), outline=(col,col,col), width=2)
 
     draw.ellipse((vcx-120, vcy-120, vcx+120, vcy+120), fill=(25,25,25))
+    draw.ellipse((vcx-20, vcy-20, vcx+20, vcy+20), fill=(10,10,10))
 
-    # ───── LEFT ALBUM (FIXED) ─────
+    # ───── LEFT ALBUM ─────
     try:
         art = Image.open(raw_path).convert("RGB").resize((120,120))
         m = Image.new("L", (120,120), 0)
@@ -167,51 +166,60 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     except:
         pass
 
-    # ───── RIGHT KNOB (FIXED) ─────
+    # ───── RIGHT KNOB (REALISTIC) ─────
     kx, ky = cx + CW + 60, cy + CH//2
 
-    draw.ellipse((kx-60, ky-60, kx+60, ky+60), fill=(50,50,50))
-    draw.ellipse((kx-40, ky-40, kx+40, ky+40), fill=(200,200,200))
+    knob = Image.new("RGBA", (160,160), (0,0,0,0))
+    kd = ImageDraw.Draw(knob)
+
+    kd.ellipse((0,0,160,160), fill=(40,40,40))
+    kd.ellipse((20,20,140,140), fill=(220,220,220))
+    kd.ellipse((50,50,110,110), fill=(180,180,180))
+
+    knob = knob.filter(ImageFilter.GaussianBlur(1))
+    base.paste(knob, (kx-80, ky-80), knob)
+
+    draw = ImageDraw.Draw(base)
 
     # ───── TEXT ─────
     draw.text((cx+120, cy+40), "Pray For Me", fill=(255,255,255), font=f_title)
-    draw.text((cx+120, cy+90), channel, fill=(200,200,200), font=f_artist)
+    draw.text((cx+120, cy+95), channel, fill=(200,200,200), font=f_artist)
 
     # ───── PROGRESS BAR ─────
     px1, px2 = cx+120, cx+520
     py = cy + 150
 
-    draw.line((px1, py, px2, py), fill=(180,180,180), width=3)
-    draw.ellipse((px1+200-6, py-6, px1+200+6, py+6), fill=(255,255,255))
+    draw.line((px1, py, px2, py), fill=(170,170,170), width=3)
+    draw.ellipse((px1+200-7, py-7, px1+200+7, py+7), fill=(255,255,255))
 
-    draw.text((px1, py-25), "2:26", font=f_time, fill=(220,220,220))
-    draw.text((px2-40, py-25), duration_text, font=f_time, fill=(220,220,220))
+    draw.text((px1, py-30), "2:26", font=f_time, fill=(220,220,220))
+    draw.text((px2-45, py-30), duration_text, font=f_time, fill=(220,220,220))
 
-    # ───── CONTROLS (SHAPE BASED) ─────
-    cy2 = cy + 200
-
-    # prev
-    draw.polygon([(cx+250, cy2), (cx+270, cy2-10), (cx+270, cy2+10)], fill="white")
-    draw.rectangle((cx+240, cy2-10, cx+245, cy2+10), fill="white")
-
-    # pause
-    draw.rectangle((cx+310, cy2-10, cx+315, cy2+10), fill="white")
-    draw.rectangle((cx+320, cy2-10, cx+325, cy2+10), fill="white")
-
-    # next
-    draw.polygon([(cx+380, cy2), (cx+360, cy2-10), (cx+360, cy2+10)], fill="white")
-    draw.rectangle((cx+385, cy2-10, cx+390, cy2+10), fill="white")
+    # ───── CONTROLS (REAL SHAPES) ─────
+    cy2 = cy + 210
 
     # shuffle
     draw.line((cx+200, cy2, cx+220, cy2-10), fill="white", width=2)
     draw.line((cx+200, cy2, cx+220, cy2+10), fill="white", width=2)
 
+    # prev
+    draw.polygon([(cx+260, cy2), (cx+280, cy2-12), (cx+280, cy2+12)], fill="white")
+    draw.rectangle((cx+245, cy2-12, cx+250, cy2+12), fill="white")
+
+    # pause
+    draw.rectangle((cx+310, cy2-12, cx+316, cy2+12), fill="white")
+    draw.rectangle((cx+322, cy2-12, cx+328, cy2+12), fill="white")
+
+    # next
+    draw.polygon([(cx+380, cy2), (cx+360, cy2-12), (cx+360, cy2+12)], fill="white")
+    draw.rectangle((cx+385, cy2-12, cx+390, cy2+12), fill="white")
+
     # repeat
-    draw.arc((cx+420, cy2-15, cx+450, cy2+15), 0, 300, fill="white", width=2)
+    draw.arc((cx+430, cy2-15, cx+460, cy2+15), 0, 300, fill="white", width=2)
 
     # ───── GREEN CHECK ─────
-    draw.ellipse((cx+520, cy+40, cx+560, cy+80), fill=(50,200,90))
-    draw.text((cx+532, cy+45), "✓", fill="white", font=f_artist)
+    draw.ellipse((cx+520, cy+40, cx+560, cy+80), fill=(40,200,90))
+    draw.text((cx+533, cy+45), "✓", fill="white", font=f_artist)
 
     # ───── SAVE ─────
     base.convert("RGB").save(cache_path, "PNG")
