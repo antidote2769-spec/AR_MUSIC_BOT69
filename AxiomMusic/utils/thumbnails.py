@@ -61,8 +61,8 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
             (0, 0, ART_SIZE, ART_SIZE), 45, fill=255
         )
 
-        art_x = 150
-        art_y = 400
+        art_x = 155
+        art_y = 405
 
         base.paste(art, (art_x, art_y), mask)
 
