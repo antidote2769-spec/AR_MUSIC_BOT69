@@ -175,8 +175,8 @@ queue_6 : "<blockquote expandable><b>🕚 ᴅᴜʀᴀᴛɪᴏɴ : ᴜɴᴋɴᴏ�
 queue_7 : "\n<blockquote expandable><b>✧ ᴄʟɪᴄᴋ ᴏɴ ʙᴜᴛᴛᴏɴ ʙᴇʟᴏᴡ ᴛᴏ ɢᴇᴛ ᴡʜᴏʟᴇ ǫᴜᴇᴜᴇᴅ ʟɪsᴛ. </b></blockquote>"
 queue_8 : "<blockquote expandable><b>✧ {0} ᴘʟᴀʏᴇʀ\n\n✧ sᴛʀᴇᴀᴍɪɴɢ : {1}\n\n✧ sᴛʀᴇᴀᴍ ᴛʏᴘᴇ : {2}\n✧ ʀᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {3}\n{4} </b></blockquote>"
 
-stream_1 : "<blockquote expandable><b> ~┃┊ 𝐒ᴛʀᴇᴀᴍ 𝐈ɴɪᴛɪᴀᴛᴇᴅ |</b></blockquote>\n\n<blockquote expandable><b>➣ Tɪᴛʟᴇ : <a href={0}>{1}</a>\n➣ Dᴜʀᴀᴛɪᴏɴ : {2} ᴍɪɴᴜᴛᴇs\n➣ Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {3} </blockquote>\n\n<blockquote>✧ ᴅєᴠєʟᴏᴘєꝛ​ : <a href='https://t.me/iii_maa7nav_iii/30'>⌯ ϻᴧᴧηᴧᴠ ⌯</a></b></blockquote>"
-stream_2 : "<blockquote expandable><b> ~┃┊ 𝐒ᴛʀᴇᴀᴍ 𝐈ɴɪᴛɪᴀᴛᴇᴅ |</b></blockquote>\n\n<blockquote expandable><b>➣ Sᴛʀᴇᴀᴍ ᴛʏᴘᴇ : ʟɪᴠᴇ sᴛʀᴇᴀᴍ [ᴜʀʟ]\n➣ Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {3} </blockquote>\n\n<blockquote>✧ ᴅєᴠєʟᴏᴘєꝛ​ : <a href='https://t.me/iii_maa7nav_iii/30'>⌯ ϻᴧᴧηᴧᴠ ⌯</a></b></blockquote>"
+stream_1 : "<blockquote expandable><b> ~┃┊ 𝐒ᴛʀᴇᴀᴍ 𝐈ɴɪᴛɪᴀᴛᴇᴅ |</b></blockquote>\n<blockquote expandable><b>➣ Tɪᴛʟᴇ : <a href={0}>{1}</a>\n➣ Dᴜʀᴀᴛɪᴏɴ : {2} ᴍɪɴᴜᴛᴇs\n➣ Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {3} </blockquote>\n\n<blockquote>✧ ᴅєᴠєʟᴏᴘєꝛ​ : <a href='https://t.me/iii_maa7nav_iii/30'>⌯ ϻᴧᴧηᴧᴠ ⌯</a></b></blockquote>"
+stream_2 : "<blockquote expandable><b> ~┃┊ 𝐒ᴛʀᴇᴀᴍ 𝐈ɴɪᴛɪᴀᴛᴇᴅ |</b></blockquote>\n<blockquote expandable><b>➣ Sᴛʀᴇᴀᴍ ᴛʏᴘᴇ : ʟɪᴠᴇ sᴛʀᴇᴀᴍ [ᴜʀʟ]\n➣ Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {3} </blockquote>\n\n<blockquote>✧ ᴅєᴠєʟᴏᴘєꝛ​ : <a href='https://t.me/iii_maa7nav_iii/30'>⌯ ϻᴧᴧηᴧᴠ ⌯</a></b></blockquote>"
 
 CLOSE_BUTTON  : "ᴄʟᴏsᴇ ⌫"
 BACK_BUTTON : "ʙᴀᴄᴋ ⟲"
