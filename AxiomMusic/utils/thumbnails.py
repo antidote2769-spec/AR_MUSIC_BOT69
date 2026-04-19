@@ -198,4 +198,4 @@ async def get_thumb(videoid: str, player_username: str = None):
     if os.path.exists(raw_path):
         os.remove(raw_path)
 
-    return result
+        return result
