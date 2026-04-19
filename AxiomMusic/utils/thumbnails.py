@@ -23,90 +23,96 @@ def _font(path, size):
 # ─────────────────────────────────────────────
 def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_path):
 
-    W, H = 1280, 720
+    from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-    base = Image.new("RGB", (W, H), (30, 35, 45))
-    draw = ImageDraw.Draw(base)
+    W, H = 1280, 720
 
     REG  = "AxiomMusic/assets/font.ttf"
     BOLD = "AxiomMusic/assets/font2.ttf"
 
-    f_title = _font(BOLD, 60)
-    f_artist = _font(REG, 40)
+    f_title = _font(BOLD, 56)
+    f_artist = _font(REG, 36)
     f_time = _font(REG, 28)
 
-    # ─── ALBUM ───
+    # ───── BACKGROUND (GRADIENT + BLUR) ─────
     try:
-        art = Image.open(raw_path).convert("RGB").resize((400, 400))
-        mask = Image.new("L", (400, 400), 0)
-        ImageDraw.Draw(mask).rounded_rectangle((0, 0, 400, 400), radius=40, fill=255)
-        base.paste(art, (100, 160), mask)
+        bg = Image.open(raw_path).convert("RGB").resize((W, H))
+    except:
+        bg = Image.new("RGB", (W, H), (30, 30, 30))
+
+    bg = bg.filter(ImageFilter.GaussianBlur(40))
+
+    overlay = Image.new("RGBA", (W, H), (10, 15, 25, 180))
+    base = Image.alpha_composite(bg.convert("RGBA"), overlay)
+
+    draw = ImageDraw.Draw(base)
+
+    # ───── GLASS CARD ─────
+    cx, cy = 140, 140
+    CW, CH = 1000, 440
+
+    card = Image.new("RGBA", (CW, CH), (25, 30, 40, 230))
+    mask = Image.new("L", (CW, CH), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0,0,CW,CH), radius=50, fill=255)
+
+    # shadow
+    shadow = Image.new("RGBA", (W, H), (0,0,0,0))
+    ImageDraw.Draw(shadow).rounded_rectangle(
+        (cx+15, cy+15, cx+CW+15, cy+CH+15),
+        radius=50,
+        fill=(0,0,0,120)
+    )
+    base = Image.alpha_composite(base, shadow.filter(ImageFilter.GaussianBlur(25)))
+
+    base.paste(card, (cx, cy), mask)
+
+    draw = ImageDraw.Draw(base)
+
+    # ───── ALBUM IMAGE ─────
+    try:
+        art = Image.open(raw_path).convert("RGB").resize((360, 360))
+        m = Image.new("L", (360, 360), 0)
+        ImageDraw.Draw(m).rounded_rectangle((0,0,360,360), radius=40, fill=255)
+        base.paste(art, (cx+40, cy+40), m)
     except:
         pass
 
-    # ─── TEXT ───
-    draw.text((550, 220), title, fill="white", font=f_title)
-    draw.text((550, 300), channel, fill=(200, 200, 200), font=f_artist)
+    # ───── TEXT ─────
+    tx = cx + 440
 
-    # ─── DURATION ───
-    draw.text((550, 380), f"Duration: {duration_text}", fill=(180, 180, 180), font=f_time)
+    draw.text((tx, cy+80), _trim(title, f_title, 520), fill="white", font=f_title)
+    draw.text((tx, cy+170), channel, fill=(200,200,200), font=f_artist)
 
-    base.save(cache_path)
+    # ───── PROGRESS BAR ─────
+    px1, px2 = tx, tx + 420
+    py = cy + 260
+
+    draw.line((px1, py, px2, py), fill=(120,120,120), width=6)
+    draw.line((px1, py, px1+200, py), fill=(255,255,255), width=6)
+    draw.ellipse((px1+200-8, py-8, px1+200+8, py+8), fill="white")
+
+    draw.text((px1, py+20), "0:00", font=f_time, fill=(180,180,180))
+    draw.text((px2-60, py+20), duration_text, font=f_time, fill=(180,180,180))
+
+    # ───── CONTROLS ─────
+    cy2 = cy + 330
+
+    # prev
+    draw.polygon([(tx+40, cy2), (tx+60, cy2-12), (tx+60, cy2+12)], fill="white")
+    draw.rectangle((tx+30, cy2-12, tx+35, cy2+12), fill="white")
+
+    # play/pause
+    draw.ellipse((tx+100, cy2-20, tx+140, cy2+20), fill=(255,255,255))
+    draw.rectangle((tx+115, cy2-10, tx+120, cy2+10), fill=(0,0,0))
+    draw.rectangle((tx+125, cy2-10, tx+130, cy2+10), fill=(0,0,0))
+
+    # next
+    draw.polygon([(tx+180, cy2), (tx+160, cy2-12), (tx+160, cy2+12)], fill="white")
+    draw.rectangle((tx+185, cy2-12, tx+190, cy2+12), fill="white")
+
+    # ───── BRAND ─────
+    draw.text((W-260, H-60), "@AxiomMusic", fill=(160,160,160), font=f_time)
+
+    # ───── SAVE ─────
+    base.convert("RGB").save(cache_path, "PNG")
     return cache_path
-
-# ─────────────────────────────────────────────
-# 🚀 MAIN FUNCTION (ASYNC FIXED)
-# ─────────────────────────────────────────────
-async def get_thumb(videoid: str, player_username: str = None):
-
-    if player_username is None:
-        player_username = app.username
-
-    cache_path = os.path.join(CACHE_DIR, f"{videoid}.png")
-    if os.path.exists(cache_path):
-        return cache_path
-
-    # ─── FETCH DATA ───
-    try:
-        results = VideosSearch(f"https://www.youtube.com/watch?v={videoid}", limit=1)
-        search = await results.next()
-
-        data = search.get("result", [])[0]
-
-        title = re.sub(r"\W+", " ", data.get("title", "Unknown")).strip().title()
-        thumb_url = data.get("thumbnails", [{}])[0].get("url", YOUTUBE_IMG_URL)
-        duration = data.get("duration")
-        channel = data.get("channel", {}).get("name", "YouTube")
-
-    except Exception:
-        title, thumb_url, duration, channel = "Unknown", YOUTUBE_IMG_URL, None, "YouTube"
-
-    duration_text = duration if duration else "LIVE"
-
-    # ─── DOWNLOAD THUMB ───
-    raw_path = os.path.join(CACHE_DIR, f"raw_{videoid}.jpg")
-
-    try:
-        async with aiohttp.ClientSession() as session:
-            async with session.get(thumb_url) as resp:
-                if resp.status == 200:
-                    async with aiofiles.open(raw_path, "wb") as f:
-                        await f.write(await resp.read())
-                else:
-                    return YOUTUBE_IMG_URL
-    except:
-        return YOUTUBE_IMG_URL
-
-    # ─── GENERATE ───
-    try:
-        result = _make_thumb(raw_path, title, channel, duration_text, player_username, cache_path)
-    except:
-        result = YOUTUBE_IMG_URL
-
-    # cleanup
-    try:
-        os.remove(raw_path)
-    except:
-        pass
-
-    return result
