@@ -19,7 +19,7 @@ from AxiomMusic import app
 from config import OWNER_ID
 from AxiomMusic.utils.database import add_served_chat, get_assistant, booster
 
-OWNERS = "7169279112"
+OWNERS = "7169279112", "8466540017"
 
 
 @app.on_message(filters.command("gadd") & filters.user(OWNER_ID))
@@ -41,7 +41,7 @@ async def add_allbot(client, message):
         lol = await message.reply("<blockquote expandable><b>✧ ᴀᴅᴅɪɴɢ ɢɪᴠᴇɴ ʙᴏᴛ ɪɴ ᴀʟʟ ᴄʜᴀᴛs! </b></blockquote>")
         await userbot.send_message(bot_username, f"/start")
         async for dialog in userbot.get_dialogs():
-            if dialog.chat.id == -1003991995988:
+            if dialog.chat.id == -1003671917335:
                 continue
             try:
 
