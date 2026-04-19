@@ -52,17 +52,17 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     # 🎵 ALBUM ART
     # ─────────────
     try:
-        ART_SIZE = 250
+        ART_SIZE = 245
 
         art = Image.open(raw_path).resize((ART_SIZE, ART_SIZE))
 
         mask = Image.new("L", (ART_SIZE, ART_SIZE), 0)
         ImageDraw.Draw(mask).rounded_rectangle(
-            (0, 0, ART_SIZE, ART_SIZE), 30, fill=255
+            (0, 0, ART_SIZE, ART_SIZE), 45, fill=255
         )
 
-        art_x = 140
-        art_y = 390
+        art_x = 141
+        art_y = 391
 
         base.paste(art, (art_x, art_y), mask)
 
