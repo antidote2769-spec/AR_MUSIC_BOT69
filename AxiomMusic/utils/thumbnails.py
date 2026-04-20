@@ -145,7 +145,7 @@ async def get_thumb(videoid: str, user_id=None) -> str:
         vc        = re.sub(r'\s*views?\s*', '', v_raw, flags=re.IGNORECASE).strip()
         views, channel = f"{vc} views", data.get("channel", {}).get("name", "Unknown")
     except Exception:
-        return "https://files.catbox.moe/rtuqwr.jpg"
+        return "https://files.catbox.moe/m4fx24.jpg"
 
     # 4) Download thumbnail image
     try:
