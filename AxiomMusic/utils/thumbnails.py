@@ -43,14 +43,13 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
 
     # ❗ radius reduced (50 → 30)
     radius = 25
+# soft glow (no rectangle look)
+    glow = Image.new("RGBA", (760, 360), (0, 0, 0, 0))
+    gdraw = ImageDraw.Draw(glow)
+    gdraw.rounded_rectangle((0, 0, 760, 360), radius, fill=(0, 0, 0, 60))
+    glow = glow.filter(ImageFilter.GaussianBlur(25))
 
-    # shadow (same rounded)
-    shadow = Image.new("RGBA", (780, 380), (0, 0, 0, 0))
-    sdraw = ImageDraw.Draw(shadow)
-    sdraw.rounded_rectangle((10, 10, 770, 370), radius, fill=(0, 0, 0, 130))
-    shadow = shadow.filter(ImageFilter.GaussianBlur(18))
-
-    base.paste(shadow, (thumb_x - 10, thumb_y - 10), shadow)
+    base.paste(glow, (thumb_x, thumb_y), glow)
 
     # thumb paste
     mask = rounded_mask((760, 360), radius)
