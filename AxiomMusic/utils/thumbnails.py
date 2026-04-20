@@ -36,13 +36,13 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     # ─────────────
     # 🎬 THUMB (FIT + LESS RADIUS)
     # ─────────────
-    thumb = Image.open(raw_path).resize((760, 360), Image.LANCZOS)
+    thumb = Image.open(raw_path).resize((760, 410), Image.LANCZOS)
 
     # 📌 position tuned to your template
-    thumb_x, thumb_y = 260, 135
+    thumb_x, thumb_y = 300, 135
 
     # ❗ radius reduced (50 → 30)
-    radius = 30
+    radius = 25
 
     # shadow (same rounded)
     shadow = Image.new("RGBA", (780, 380), (0, 0, 0, 0))
