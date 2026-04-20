@@ -12,36 +12,45 @@ os.makedirs(CACHE_DIR, exist_ok=True)
 
 TEMPLATE_PATH = "AxiomMusic/assets/template.png"
 
-# 🎯 COLOR (same as template – adjust if needed)
-ACCENT = (180, 180, 180)
+# 🎯 same grey/purple tone (NOT white)
+ACCENT = (160, 160, 170)
 
 
-# ─────────────────────────────
-# 🎨 THUMB RENDER (TEMPLATE BASED)
-# ─────────────────────────────
+def rounded_mask(size, radius):
+    mask = Image.new("L", size, 0)
+    draw = ImageDraw.Draw(mask)
+    draw.rounded_rectangle((0, 0, size[0], size[1]), radius=radius, fill=255)
+    return mask
+
+
 def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_path):
 
     WIDTH, HEIGHT = 1280, 720
+    RADIUS = 50
 
     base = Image.open(TEMPLATE_PATH).convert("RGB").resize((WIDTH, HEIGHT))
     draw = ImageDraw.Draw(base)
 
-    font_title = ImageFont.truetype("AxiomMusic/assets/font2.ttf", 40)
-    font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 26)
+    # 👇 FIXED FONT SIZES
+    font_title = ImageFont.truetype("AxiomMusic/assets/font2.ttf", 36)  # thoda chhota
+    font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 30)  # time bada
 
     # ─────────────
-    # 🎬 THUMB (INSIDE TEMPLATE BOX)
+    # 🎬 THUMB (ROUNDED + FIT)
     # ─────────────
     thumb = Image.open(raw_path).resize((760, 380))
 
-    # 👇 adjust if needed (perfect match template)
     thumb_x, thumb_y = 260, 130
 
-    base.paste(thumb, (thumb_x, thumb_y))
+    mask = rounded_mask((760, 380), RADIUS)
+    base.paste(thumb, (thumb_x, thumb_y), mask)
 
     # ─────────────
-    # ⏱️ PROGRESS BAR
+    # 🕒 TIME ONLY (NO EXTRA BAR)
     # ─────────────
+    def fmt(sec):
+        return f"{sec//60:02}:{sec%60:02}"
+
     try:
         m, s = map(int, duration_text.split(":"))
         total_sec = m * 60 + s
@@ -50,24 +59,7 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
 
     current_sec = int(total_sec * 0.15)
 
-    bar_x = 110
-    top = 120
-    bottom = 600
-
-    draw.line((bar_x, top, bar_x, bottom), fill=(180, 180, 180), width=4)
-
-    py = bottom - int((bottom - top) * (current_sec / total_sec))
-
-    draw.line((bar_x, py, bar_x, bottom), fill=ACCENT, width=4)
-
-    draw.ellipse((bar_x-7, py-7, bar_x+7, py+7), fill=ACCENT)
-
-    # ─────────────
-    # 🕒 TIME
-    # ─────────────
-    def fmt(sec):
-        return f"{sec//60:02}:{sec%60:02}"
-
+    # 👇 SAME TEMPLATE POSITION
     draw.text((60, 70), fmt(current_sec), fill=ACCENT, font=font_artist)
     draw.text((60, 640), duration_text, fill=ACCENT, font=font_artist)
 
@@ -90,10 +82,10 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     title = re.sub(r"\W+", " ", title)
 
     text_x = 300
-    text_y = 560
+    text_y = 570
 
     for i, line in enumerate(wrap(title)):
-        draw.text((text_x, text_y + i*45), line, fill="white", font=font_title)
+        draw.text((text_x, text_y + i*45), line, fill=(220, 220, 220), font=font_title)
 
     draw.text(
         (text_x, text_y + 95),
@@ -108,12 +100,11 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     draw.text(
         (1000, 650),
         "Dev :- Maanav",
-        fill=(220, 220, 220),
+        fill=(200, 200, 200),
         font=font_artist,
     )
 
     base.save(cache_path, quality=95)
-
     return cache_path
 
 
