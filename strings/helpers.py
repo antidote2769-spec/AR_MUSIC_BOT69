@@ -12,129 +12,128 @@
 # ❤️ Made with dedication and love by AxiomBots
 # -----------------------------------------------
 
-HELP_1 = """<blockquote expandable><b><u>⊚ ᴀᴅᴍɪɴ ᴄᴏᴍᴍᴀɴᴅs :</u></b></blockquote>
+HELP_1 = """<blockquote expandable><b><u>⊚ ᴧᴅϻɪη ᴄσϻϻᴧηᴅs :</u></b></blockquote>
 
-<blockquote expandable><b>ᴊᴜsᴛ ᴀᴅᴅ ᴄ ɪɴ ᴛʜᴇ sᴛᴀʀᴛɪɴɢ ᴏғ ᴛʜᴇ ᴄᴏᴍᴍᴀɴᴅs ᴛᴏ ᴜsᴇ ᴛʜᴇᴍ ғᴏʀ ᴄʜᴀɴɴᴇʟ.</b></blockquote>
+<blockquote expandable><b>ᴊυsᴛ ᴧᴅᴅ ᴄ ɪη ᴛʜє sᴛᴧʀᴛɪηɢ σғ ᴛʜє ᴄσϻϻᴧηᴅs ᴛσ υsє ᴛʜєϻ ғσʀ ᴄʜᴧηηєʟ.</b></blockquote>
 
-<blockquote expandable><b>/pause : ᴩᴀᴜsᴇ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴩʟᴀʏɪɴɢ sᴛʀᴇᴀᴍ.<br>
-/resume : ʀᴇsᴜᴍᴇ ᴛʜᴇ ᴩᴀᴜsᴇᴅ sᴛʀᴇᴀᴍ.<br>
-/skip : sᴋɪᴩ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴛʀᴀᴄᴋ ᴀɴᴅ ᴘʟᴀʏ ɴᴇxᴛ ɪɴ ǫᴜᴇᴜᴇ.<br>
-/end or /stop : ᴄʟᴇᴀʀs ǫᴜᴇᴜᴇ ᴀɴᴅ sᴛᴏᴩs sᴛʀᴇᴀᴍ.<br>
-/queue : sʜᴏᴡs ǫᴜᴇᴜᴇᴅ ᴛʀᴀᴄᴋs.<br>
-/loop [ᴅɪsᴀʙʟᴇ/ᴇɴᴀʙʟᴇ] ᴏʀ [1:10] : ʟᴏᴏᴘ ᴄᴜʀʀᴇɴᴛ sᴏɴɢ.<br>
-/shuffle : sʜᴜғғʟᴇs ǫᴜᴇᴜᴇ.<br>
-/seek : sᴇᴇᴋ ᴛᴏ ɢɪᴠᴇɴ ᴛɪᴍᴇ.<br>
-/seekback : ʙᴀᴄᴋᴡᴀʀᴅ sᴇᴇᴋ ᴛᴏ ɢɪᴠᴇɴ ᴛɪᴍᴇ.<br>
-/speed or /playback : ᴀᴅᴊᴜsᴛ ᴘʟᴀʏʙᴀᴄᴋ sᴘᴇᴇᴅ.</b></blockquote>
+<blockquote expandable><b>/pause : ᴩᴧυsє ᴛʜє ᴄυʀʀєηᴛ ᴩʟᴧʏɪηɢ sᴛʀєᴧϻ.<br>
+/resume : ʀєsυϻє ᴛʜє ᴩᴧυsєᴅ sᴛʀєᴧϻ.<br>
+/skip : sᴋɪᴩ ᴛʜє ᴄυʀʀєηᴛ ᴛʀᴧᴄᴋ ᴧηᴅ ᴘʟᴧʏ ηєxᴛ ɪη ǫυєυє.<br>
+/end or /stop : ᴄʟєᴧʀs ǫυєυє ᴧηᴅ sᴛσᴘs sᴛʀєᴧϻ.<br>
+/queue : sʜσᴡs ǫυєυєᴅ ᴛʀᴧᴄᴋs.<br>
+/loop [disable/enable] or [1:10] : ʟσσᴘ ᴄυʀʀєηᴛ sσηɢ.<br>
+/shuffle : sʜυғғʟєs ǫυєυє.<br>
+/seek : sєєᴋ ᴛσ ɢɪᴠєη ᴛɪϻє.<br>
+/seekback : ʙᴧᴄᴋᴡᴧʀᴅ sєєᴋ ᴛσ ɢɪᴠєη ᴛɪϻє.<br>
+/speed or /playback : ᴧᴅᴊυsᴛ ᴘʟᴧʏʙᴧᴄᴋ sᴘєєᴅ.</b></blockquote>
 """
 
-HELP_2 = """<blockquote expandable><b><u>⊚ ᴀᴜᴛʜ ᴜsᴇʀs :</u></b></blockquote>
+HELP_2 = """<blockquote expandable><b><u>⊚ ᴧυᴛʜ υsєʀs :</u></b></blockquote>
 
-<blockquote expandable><b>➻ ᴀᴜᴛʜ ᴜsᴇʀs ᴄᴀɴ ᴜsᴇ ᴀᴅᴍɪɴ ʀɪɢʜᴛs ᴡɪᴛʜᴏᴜᴛ ʙᴇɪɴɢ ᴀ ɢʀᴏᴜᴩ ᴀᴅᴍɪɴ.</b></blockquote>
+<blockquote expandable><b>➻ ᴧυᴛʜ υsєʀs ᴄᴧη υsє ᴧᴅϻɪη ʀɪɢʜᴛs ᴡɪᴛʜσυᴛ ʙєɪηɢ ᴧ ɢʀσυᴘ ᴧᴅϻɪη.</b></blockquote>
 
-<blockquote expandable><b>/auth [ᴜsᴇʀɴᴀᴍᴇ/ɪᴅ] : ᴀᴅᴅ ᴛᴏ ᴀᴜᴛʜ ʟɪsᴛ.<br>
-/unauth [ᴜsᴇʀɴᴀᴍᴇ/ɪᴅ] : ʀᴇᴍᴏᴠᴇ ᴀᴜᴛʜ ᴜsᴇʀ.<br>
-/authusers : sʜᴏᴡ ᴀᴜᴛʜ ᴜsᴇʀs ʟɪsᴛ.</b></blockquote>
+<blockquote expandable><b>/auth [username/id] : ᴧᴅᴅ ᴛσ ᴧυᴛʜ ʟɪsᴛ.<br>
+/unauth [username/id] : ʀєϻσᴠє ᴧυᴛʜ υsєʀ.<br>
+/authusers : sʜσᴡ ᴧυᴛʜ υsєʀs ʟɪsᴛ.</b></blockquote>
 """
 
-HELP_3 = """<blockquote expandable><b><u>⊚ ʙʀᴏᴀᴅᴄᴀsᴛ ғᴇᴀᴛᴜʀᴇ</u> [ᴏɴʟʏ ғᴏʀ sᴜᴅᴏᴇʀs]: </b></blockquote>
+HELP_3 = """<blockquote expandable><b><u>⊚ ʙʀσᴧᴅᴄᴧsᴛ ғєᴧᴛυʀє</u> [σηʟʏ ғσʀ sυᴅσєʀs]: </b></blockquote>
 
-<blockquote expandable><b>/broadcast [ᴍᴇssᴀɢᴇ ᴏʀ ʀᴇᴩʟʏ] : sᴇɴᴅ ᴛᴏ ᴀʟʟ ᴄʜᴀᴛs. </b></blockquote>
+<blockquote expandable><b>/broadcast [message or reply] : sєηᴅ ᴛσ ᴧʟʟ ᴄʜᴧᴛs. </b></blockquote>
 
-<blockquote expandable><b><u>➻ ᴍᴏᴅᴇs :</u><br>
--pin : ᴩɪɴ ᴛʜᴇ ᴍᴇssᴀɢᴇ<br>
--pinloud : ᴩɪɴ + ɴᴏᴛɪғʏ ᴍᴇᴍʙᴇʀs<br>
--user : ʙʀᴏᴀᴅᴄᴀsᴛ ᴛᴏ sᴛᴀʀᴛᴇᴅ ᴜsᴇʀs<br>
--assistant : sᴇɴᴅ ᴠɪᴀ ϻᴧᴧηᴧᴠɪɪ<br>
--nobot : ᴅᴏɴ'ᴛ sᴇɴᴅ ғʀᴏᴍ ʙᴏᴛ </b></blockquote>
+<blockquote expandable><b><u>➻ ϻσᴅєs :</u><br>
+-pin : ᴩɪη ᴛʜє ϻєssᴧɢє<br>
+-pinloud : ᴩɪη + ησᴛɪғʏ ϻєϻʙєʀs<br>
+-user : ʙʀσᴧᴅᴄᴧsᴛ ᴛσ sᴛᴧʀᴛєᴅ υsєʀs<br>
+-assistant : sєηᴅ ᴠɪᴧ ϻᴧᴧηᴧᴠɪɪ<br>
+-nobot : ᴅση'ᴛ sєηᴅ ғʀσϻ ʙσᴛ </b></blockquote>
 
-<blockquote expandable><b>⊚ Example : <code>/broadcast -user -pin Testing broadcast</code></b></blockquote>
+<blockquote expandable><b>⊚ єxᴧϻᴘʟє : <code>/broadcast -user -pin Testing broadcast</code></b></blockquote>
 """
 
-HELP_4 = """<u><blockquote expandable><b>⊚ ʙʟᴀᴄᴋʟɪsᴛ & ʙʟᴏᴄᴋ:</u> [ᴏɴʟʏ ғᴏʀ sᴜᴅᴏᴇʀs] </b></blockquote>
+HELP_4 = """<u><blockquote expandable><b>⊚ ʙʟᴧᴄᴋʟɪsᴛ & ʙʟσᴄᴋ:</u> [σηʟʏ ғσʀ sυᴅσєʀs] </b></blockquote>
 
-<blockquote expandable><b> /blacklistchat [ɪᴅ] : ʙᴀɴ ᴄʜᴀᴛ<br>
-/whitelistchat [ɪᴅ] : ᴜɴʙᴀɴ ᴄʜᴀᴛ<br>
-/blacklistedchat : sʜᴏᴡ ʙʟᴀᴄᴋʟɪsᴛ </b></blockquote>
+<blockquote expandable><b> /blacklistchat [id] : ʙᴧη ᴄʜᴧᴛ<br>
+/whitelistchat [id] : υηʙᴧη ᴄʜᴧᴛ<br>
+/blacklistedchat : sʜσᴡ ʙʟᴧᴄᴋʟɪsᴛ </b></blockquote>
 
-<u><blockquote expandable><b>⊚ ʙʟᴏᴄᴋ ᴜsᴇʀs : </b></blockquote></u>
+<u><blockquote expandable><b>⊚ ʙʟσᴄᴋ υsєʀs : </b></blockquote></u>
 
-<blockquote expandable><b> /block [ᴜsᴇʀ] : ᴘʀᴇᴠᴇɴᴛ ᴜsᴇʀ ᴄᴏᴍᴍᴀɴᴅs<br>
-/unblock [ᴜsᴇʀ] : ᴀʟʟᴏᴡ ᴛʜᴇᴍ ᴀɢᴀɪɴ<br>
-/blockedusers : sʜᴏᴡ ʙʟᴏᴄᴋᴇᴅ ᴜsᴇʀs </b></blockquote>
+<blockquote expandable><b> /block [user] : ᴘʀєᴠєηᴛ υsєʀ ᴄσϻϻᴧηᴅs<br>
+/unblock [user] : ᴧʟʟσᴡ ᴛʜєϻ ᴧɢᴧɪη<br>
+/blockedusers : sʜσᴡ ʙʟσᴄᴋєᴅ υsєʀs </b></blockquote>
 """
 
-HELP_5 = """<u><blockquote expandable><b>⊚ ᴩʟᴀʏ & ᴄʜᴀɴɴᴇʟ ᴩʟᴀʏ : </b></blockquote></u>
+HELP_5 = """<u><blockquote expandable><b>⊚ ᴘʟᴧʏ & ᴄʜᴧηηєʟ ᴘʟᴧʏ : </b></blockquote></u>
 
-<blockquote expandable><b> /play or /vplay : ᴘʟᴀʏ ᴀᴜᴅɪᴏ/ᴠɪᴅᴇᴏ<br>
-/playforce or /vplayforce : ғᴏʀᴄᴇ ᴩʟᴀʏ<br>
-/song : sᴇᴀʀᴄʜ & ᴅᴏᴡɴʟᴏᴀᴅ sᴏɴɢ ɪɴ ᴀᴜᴅɪᴏ/ᴠɪᴅᴇᴏ ғᴏʀᴍᴀᴛ </b></blockquote>
+<blockquote expandable><b> /play or /vplay : ᴘʟᴧʏ ᴧυᴅɪσ/ᴠɪᴅєσ<br>
+/playforce or /vplayforce : ғσʀᴄє ᴘʟᴧʏ<br>
+/song : sєᴧʀᴄʜ & ᴅσᴡηʟσᴧᴅ sσηɢ ɪη ᴧυᴅɪσ/ᴠɪᴅєσ ғσʀϻᴧᴛ </b></blockquote>
 
-<u><blockquote expandable><b>⊚ ᴄʜᴀɴɴᴇʟ ᴘʟᴀʏ : </b></blockquote></u>
+<u><blockquote expandable><b>⊚ ᴄʜᴧηηєʟ ᴘʟᴧʏ : </b></blockquote></u>
 
-<blockquote expandable><b>/cplay : ᴘʟᴀʏ ᴀᴜᴅɪᴏ ɪɴ ᴄʜᴀɴɴᴇʟ<br>
-/cvplay : ᴘʟᴀʏ ᴠɪᴅᴇᴏ ɪɴ ᴄʜᴀɴɴᴇʟ<br>
-/cplayforce or /cvplayforce : ғᴏʀᴄᴇ ᴘʟᴀʏ ɪɴ ᴄʜᴀɴɴᴇʟ<br>
-/channelplay [ɪᴅ|ᴜsᴇʀɴᴀᴍᴇ|disable] : ʟɪɴᴋ ᴄʜᴀɴɴᴇʟ ᴡɪᴛʜ ɢʀᴏᴜᴩ </b></blockquote>
+<blockquote expandable><b>/cplay : ᴘʟᴧʏ ᴧυᴅɪσ ɪη ᴄʜᴧηηєʟ<br>
+/cvplay : ᴘʟᴧʏ ᴠɪᴅєσ ɪη ᴄʜᴧηηєʟ<br>
+/cplayforce or /cvplayforce : ғσʀᴄє ᴘʟᴧʏ ɪη ᴄʜᴧηηєʟ<br>
+/channelplay [id|username|disable] : ʟɪηᴋ ᴄʜᴧηηєʟ ᴡɪᴛʜ ɢʀσυᴘ </b></blockquote>
 """
 
-HELP_6 = """<u><blockquote expandable><b>⊚ ɢʟᴏʙᴀʟ ʙᴀɴ :</u> [ᴏɴʟʏ ғᴏʀ sᴜᴅᴏᴇʀs] </b></blockquote>
+HELP_6 = """<u><blockquote expandable><b>⊚ ɢʟσʙᴧʟ ʙᴧη :</u> [σηʟʏ ғσʀ sυᴅσєʀs] </b></blockquote>
 
-<blockquote expandable><b> /gban [ᴜsᴇʀ] : ɢʟᴏʙᴀʟ ʙᴀɴ ᴛʜᴇ ᴜsᴇʀ<br>
-/ungban [ᴜsᴇʀ] : ᴜɴʙᴀɴ ᴛʜᴇ ᴜsᴇʀ<br>
-/gbannedusers : sʜᴏᴡ ᴛʜᴇ ʙᴀɴɴᴇᴅ ᴜsᴇʀs </b></blockquote>
+<blockquote expandable><b> /gban [user] : ɢʟσʙᴧʟ ʙᴧη ᴛʜє υsєʀ<br>
+/ungban [user] : υηʙᴧη ᴛʜє υsєʀ<br>
+/gbannedusers : sʜσᴡ ᴛʜє ʙᴧηηєᴅ υsєʀs </b></blockquote>
 """
 
-HELP_7 = """<blockquote expandable><b><u>⊚ ᴀᴄᴛɪᴠᴇ ᴠᴏɪᴄᴇ/ᴠɪᴅᴇᴏᴄʜᴀᴛs :</u> </b></blockquote>
+HELP_7 = """<blockquote expandable><b><u>⊚ ᴧᴄᴛɪᴠє ᴠσɪᴄє/ᴠɪᴅєσᴄʜᴧᴛs :</u> </b></blockquote>
 
-<blockquote expandable><b> /activevoice : ʟɪsᴛ ᴏғ ᴠᴏɪᴄᴇ ᴄʜᴀᴛs<br>
-/activevideo : ʟɪsᴛ ᴏғ ᴠɪᴅᴇᴏ ᴄʜᴀᴛs<br>
-/ac : ʙᴏᴛʜ ᴠᴏɪᴄᴇ + ᴠɪᴅᴇᴏ<br>
-/autoend [enable|disable] : sᴛᴏᴘ ɪғ ɴᴏ ʟɪsᴛᴇɴᴇʀ </b></blockquote>
+<blockquote expandable><b> /activevoice : ʟɪsᴛ σғ ᴠσɪᴄє ᴄʜᴧᴛs<br>
+/activevideo : ʟɪsᴛ σғ ᴠɪᴅєσ ᴄʜᴧᴛs<br>
+/ac : ʙσᴛʜ ᴠσɪᴄє + ᴠɪᴅєσ<br>
+/autoend [enable|disable] : sᴛσᴘ ɪғ ησ ʟɪsᴛєηєʀ </b></blockquote>
 """
 
-HELP_8 = """<u><blockquote expandable><b>⊚ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ ᴍᴏᴅᴇ :</u> [ᴏɴʟʏ ғᴏʀ sᴜᴅᴏᴇʀs] </b></blockquote>
+HELP_8 = """<u><blockquote expandable><b>⊚ ϻᴧɪηᴛєηᴧηᴄє ϻσᴅє :</u> [σηʟʏ ғσʀ sυᴅσєʀs] </b></blockquote>
 
-<blockquote expandable><b> /logs : ɢᴇᴛ ʟᴏɢs<br>
-/logger [enable|disable] : ᴀᴄᴛɪᴠɪᴛʏ ʟᴏɢɢɪɴɢ<br>
-/maintenance [enable|disable] : ᴛᴏɢɢʟᴇ ᴍᴀɪɴᴛᴇɴᴀɴᴄᴇ </b></blockquote>
+<blockquote expandable><b> /logs : ɢєᴛ ʟσɢs<br>
+/logger [enable|disable] : ᴧᴄᴛɪᴠɪᴛʏ ʟσɢɢɪηɢ<br>
+/maintenance [enable|disable] : ᴛσɢɢʟє ϻᴧɪηᴛєηᴧηᴄє </b></blockquote>
 """
 
-HELP_9 = """<blockquote expandable><b><u>⊚ ʙᴀsɪᴄ ᴄᴏᴍᴍᴀɴᴅs :</u> </b></blockquote>
+HELP_9 = """<blockquote expandable><b><u>⊚ ʙᴧsɪᴄ ᴄσϻϻᴧηᴅs :</u> </b></blockquote>
 
-<blockquote expandable><b>✧ /start : sᴛᴀʀᴛ ʙᴏᴛ<br>
-/help : ʜᴇʟᴘ ᴍᴇɴᴜ<br>
-/ping : ᴘɪɴɢ ᴀɴᴅ sʏsᴛᴇᴍ sᴛᴀᴛs<br>
-/reboot : ʀᴇʙᴏᴏᴛ ʙᴏᴛ<br>
-/settings : ɢʀᴏᴜᴩ sᴇᴛᴛɪɴɢs<br>
-/sudolist : sᴜᴅᴏ ᴜsᴇʀs<br>
-/restart : ʀᴇsᴛᴀʀᴛ ʙᴏᴛ<br>
-/stats : ʙᴏᴛ sᴛᴀᴛɪsᴛɪᴄs </b></blockquote>
+<blockquote expandable><b>✧ /start : sᴛᴧʀᴛ ʙσᴛ<br>
+/help : ʜєʟᴘ ϻєηυ<br>
+/ping : ᴘɪηɢ ᴧηᴅ sʏsᴛєϻ sᴛᴧᴛs<br>
+/reboot : ʀєʙσσᴛ ʙσᴛ<br>
+/settings : ɢʀσυᴘ sєᴛᴛɪηɢs<br>
+/sudolist : sυᴅσ υsєʀs<br>
+/restart : ʀєsᴛᴧʀᴛ ʙσᴛ<br>
+/stats : ʙσᴛ sᴛᴧᴛɪsᴛɪᴄs </b></blockquote>
 """
 
-HELP_10 = """<blockquote expandable><b><u>⊚ ɢʀᴏᴜᴘ ᴍᴀss ᴀᴄᴛɪᴏɴ ᴄᴏᴍᴍᴀɴᴅs :</u> </b></blockquote>
+HELP_10 = """<blockquote expandable><b><u>⊚ ɢʀσυᴘ ϻᴧss ᴧᴄᴛɪση ᴄσϻϻᴧηᴅs :</u> </b></blockquote>
 
 <blockquote expandable><b>
-/ban : ʙᴀɴ ᴀ ᴜsᴇʀ ғʀᴏᴍ ᴛʜᴇ ᴄʜᴀᴛ<br>
-/unban : ᴜɴʙᴀɴ ᴀ ᴜsᴇʀ ғʀᴏᴍ ᴛʜᴇ ᴄʜᴀᴛ<br>
-/kickme : sᴇʟғ-ʙᴀɴ / ʟᴇᴀᴠᴇ ᴛʜᴇ ᴄʜᴀᴛ<br>
-/banall : ʙᴀɴ ᴀʟʟ ᴜsᴇʀs ɪɴ ᴛʜᴇ ɢʀᴏᴜᴘ<br>
-/unbanall : ᴜɴʙᴀɴ ᴀʟʟ ᴜsᴇʀs ɪɴ ᴛʜᴇ ɢʀᴏᴜᴘ<br>
-/muteall : ᴍᴜᴛᴇ ᴀʟʟ ɴᴏɴ-ᴀᴅᴍɪɴs<br>
-/unmuteall : ᴜɴᴍᴜᴛᴇ ᴀʟʟ ɴᴏɴ-ᴀᴅᴍɪɴs<br>
-/joinmode : sᴡɪᴛᴄʜ ᴀᴜᴛᴏ/ᴍᴀɴᴜᴀʟ ᴀᴘᴘʀᴏᴠᴀʟ ᴍᴏᴅᴇ
+/ban : ʙᴧη ᴧ υsєʀ ғʀσϻ ᴛʜє ᴄʜᴧᴛ<br>
+/unban : υηʙᴧη ᴧ υsєʀ ғʀσϻ ᴛʜє ᴄʜᴧᴛ<br>
+/kickme : sєʟғ-ʙᴧη / ʟєᴧᴠє ᴛʜє ᴄʜᴧᴛ<br>
+/banall : ʙᴧη ᴧʟʟ υsєʀs ɪη ᴛʜє ɢʀσυᴘ<br>
+/unbanall : υηʙᴧη ᴧʟʟ υsєʀs ɪη ᴛʜє ɢʀσυᴘ<br>
+/muteall : ϻυᴛє ᴧʟʟ ηση-ᴧᴅϻɪηs<br>
+/unmuteall : υηϻυᴛє ᴧʟʟ ηση-ᴧᴅϻɪηs<br>
+/joinmode : sᴡɪᴛᴄʜ ᴧυᴛσ/ϻᴧηυᴧʟ ᴧᴘᴘʀσᴠᴧʟ ϻσᴅє
  </b></blockquote>
 
 
-<u><blockquote expandable><b>⊚ ᴇxᴛʀᴀ ᴜsᴇʀ's ᴄᴏᴍᴍᴀɴᴅs : </b></blockquote></u>
+<u><blockquote expandable><b>⊚ єxᴛʀᴧ υsєʀ's ᴄσϻϻᴧηᴅs : </b></blockquote></u>
 
 <blockquote expandable><b>
-/afk ᴏʀ /bye : sᴇᴛ ᴀғᴋ sᴛᴀᴛᴜs ɪғ ʏᴏᴜ'ʀᴇ ᴏғғʟɪɴᴇ<br>
-/id : ɢᴇᴛ ᴜsᴇʀ / ᴄʜᴀᴛ / ʙᴏᴛ ɪᴅ<br>
-/info ᴏʀ /whois : ɢᴇᴛ ᴜsᴇʀ ᴘʀᴏғɪʟᴇ ɪɴғᴏ<br>
-/sg : sᴇᴇ ᴀʟʟ ᴘᴀsᴛ ɪɴᴛᴇʀᴀᴄᴛɪᴏɴs<br>
-/tgm : ᴜᴘʟᴏᴀᴅ ᴍᴇᴅɪᴀ/ᴘʜᴏᴛᴏ ᴛᴏ ᴄᴀᴛʙᴏx ʟɪɴᴋ<br>
-/random : ɢᴇᴛ ᴀ ʀᴀɴᴅᴏᴍ ɪᴍᴀɢᴇ
+/afk or /bye : sєᴛ ᴧғᴋ sᴛᴧᴛυs ɪғ ʏσυ'ʀє σғғʟɪηє<br>
+/id : ɢєᴛ υsєʀ / ᴄʜᴧᴛ / ʙσᴛ ɪᴅ<br>
+/info or /whois : ɢєᴛ υsєʀ ᴘʀσғɪʟє ɪηғσ<br>
+/sg : sєє ᴧʟʟ ᴘᴧsᴛ ɪηᴛєʀᴧᴄᴛɪσηs<br>
+/tgm : υᴘʟσᴧᴅ ϻєᴅɪᴧ/ᴘʜσᴛσ ᴛσ ᴄᴧᴛʙσx ʟɪηᴋ<br>
+/random : ɢєᴛ ᴧ ʀᴧηᴅσϻ ɪϻᴧɢє
  </b></blockquote>
 """
-
