@@ -21,17 +21,17 @@ from config import LOGGER_ID
 async def play_logs(message, streamtype):
     if await is_on_off(2):
         logger_text = f"""<blockquote expandable>
-        <b>{app.mention} ᴘʟᴀʏ ʟᴏɢ
+        <b>{app.mention} ᴘʟᴀʏ ʟᴏɢ </blockquote>
 
-❖ ᴄʜᴀᴛ ɪᴅ : <code>{message.chat.id}</code>
+<blockquote expandable>❖ ᴄʜᴀᴛ ɪᴅ : <code>{message.chat.id}</code>
 ❖ ᴄʜᴀᴛ ɴᴀᴍᴇ : {message.chat.title}
-❖ ᴄʜᴀᴛ ᴜsᴇʀɴᴀᴍᴇ : @{message.chat.username}
+❖ ᴄʜᴀᴛ ᴜsᴇʀɴᴀᴍᴇ : @{message.chat.username} </blockquote>
 
-✦ ᴜsᴇʀ ɪᴅ : <code>{message.from_user.id}</code>
+<blockquote expandable>✦ ᴜsᴇʀ ɪᴅ : <code>{message.from_user.id}</code>
 ✦ ɴᴀᴍᴇ : {message.from_user.mention}
-✦ ᴜsᴇʀɴᴀᴍᴇ : @{message.from_user.username}
+✦ ᴜsᴇʀɴᴀᴍᴇ : @{message.from_user.username} </blockquote>
 
-➤ ǫᴜᴇʀʏ : {message.text.split(None, 1)[1]}
+<blockquote expandable>➤ ǫᴜᴇʀʏ : {message.text.split(None, 1)[1]}
 ➤ sᴛʀᴇᴀᴍᴛʏᴘᴇ : {streamtype}</b></blockquote>"""
         if message.chat.id != LOGGER_ID:
             try:
