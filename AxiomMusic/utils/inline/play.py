@@ -81,9 +81,9 @@ def stream_markup_timer(_, chat_id, played, dur):
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}"),
         ],
         [
-            InlineKeyboardButton("⪻ -𝟸𝟶", callback_data="seek_backward_20"),
-            InlineKeyboardButton(" ⌯ ᴅєᴠєʟᴏᴘєꝛ​ ⌯ ", user_id=config.OWNER_ID),
-            InlineKeyboardButton("𝟸𝟶+ ⪼", callback_data="seek_forward_20"),
+            InlineKeyboardButton("⪻ -𝟸5s", callback_data="seek_backward_20"),
+            InlineKeyboardButton(text=_["H_B_34"], callback_data="help_callback hb10"),
+            InlineKeyboardButton("+𝟸5s ⪼", callback_data="seek_forward_20"),
         ],
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
     ]
@@ -100,9 +100,9 @@ def stream_markup(_, chat_id):
             InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}"),
         ],
         [
-            InlineKeyboardButton("⪻ -𝟸𝟶", callback_data="seek_backward_20"),
-            InlineKeyboardButton(" ⌯ ᴅєᴠєʟᴏᴘєꝛ​ ⌯ ", user_id=config.OWNER_ID),
-            InlineKeyboardButton("𝟸𝟶+ ⪼", callback_data="seek_forward_20"),
+            InlineKeyboardButton("⪻ -𝟸5s", callback_data="seek_backward_20"),
+            InlineKeyboardButton(text=_["H_B_34"], callback_data="help_callback hb10"),
+            InlineKeyboardButton("+𝟸5s ⪼", callback_data="seek_forward_20"),
         ],
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
     ]
