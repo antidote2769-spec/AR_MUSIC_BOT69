@@ -75,7 +75,7 @@ def queue_back_markup(_, CPLAY):
 def aq_markup(_, chat_id):
     buttons = [
         [
-            InlineKeyboardButton(text="ʏᴛ-ᴀᴘɪ sᴛᴀᴛυs 📼", callback_data="bot_info_data"),
+            InlineKeyboardButton(text="ʏᴛ-ᴀᴘɪ sᴛᴀᴛυs 📼", callback_data="api_status"),
         ],
         [
             InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}"),
