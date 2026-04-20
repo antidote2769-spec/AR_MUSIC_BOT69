@@ -10,7 +10,8 @@ from AxiomMusic import app
 CACHE_DIR = "cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
-ACCENT = (230, 200, 120)
+# 🎯 PURPLE UI (same as your sample)
+ACCENT = (160, 140, 255)
 
 
 def rounded_mask(size, radius):
@@ -20,9 +21,6 @@ def rounded_mask(size, radius):
     return mask
 
 
-# ─────────────────────────────
-# 🎨 THUMB RENDER
-# ─────────────────────────────
 def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_path):
 
     WIDTH, HEIGHT = 1280, 720
@@ -31,56 +29,93 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     font_title = ImageFont.truetype("AxiomMusic/assets/font2.ttf", 42)
     font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 28)
 
-    # 🌌 BACKGROUND
+    # ─────────────
+    # 🌌 CINEMATIC BACKGROUND (EXACT STYLE)
+    # ─────────────
     bg = Image.open(raw_path).convert("RGB").resize((WIDTH, HEIGHT), Image.LANCZOS)
-    bg = bg.filter(ImageFilter.GaussianBlur(35))
 
-    overlay = Image.new("RGB", (WIDTH, HEIGHT), (0, 60, 70))
-    bg = Image.blend(bg, overlay, 0.4)
+    bg = bg.filter(ImageFilter.GaussianBlur(40))
 
+    overlay = Image.new("RGB", (WIDTH, HEIGHT), (0, 50, 65))
+    bg = Image.blend(bg, overlay, 0.45)
+
+    # center glow
     glow = Image.new("L", (WIDTH, HEIGHT), 0)
-    gdraw = ImageDraw.Draw(glow)
-    gdraw.ellipse((200, 100, 1100, 650), fill=255)
-    glow = glow.filter(ImageFilter.GaussianBlur(200))
+    g = ImageDraw.Draw(glow)
+    g.ellipse((200, 100, 1100, 650), fill=255)
+    glow = glow.filter(ImageFilter.GaussianBlur(220))
 
     light = Image.new("RGB", (WIDTH, HEIGHT), (255, 255, 255))
     bg = Image.composite(light, bg, glow)
 
     bg = ImageEnhance.Brightness(bg).enhance(0.7)
+
     base.paste(bg, (0, 0))
+    draw = ImageDraw.Draw(base)
+
+    # ─────────────
+    # 🧊 GLASS CARD
+    # ─────────────
+    card = bg.crop((200, 80, 1080, 620)).filter(ImageFilter.GaussianBlur(25))
+
+    glass = Image.new("RGBA", card.size, (255, 255, 255, 25))
+    card = Image.alpha_composite(card.convert("RGBA"), glass)
+
+    # shadow
+    shadow = Image.new("RGBA", (card.size[0]+40, card.size[1]+40), (0, 0, 0, 0))
+    sd = ImageDraw.Draw(shadow)
+    sd.rounded_rectangle((20, 20, card.size[0]+20, card.size[1]+20),
+                         50, fill=(0, 0, 0, 140))
+    shadow = shadow.filter(ImageFilter.GaussianBlur(30))
+
+    base.paste(shadow, (180, 60), shadow)
+
+    mask = rounded_mask(card.size, 50)
+    base.paste(card, (200, 80), mask)
 
     draw = ImageDraw.Draw(base)
 
-    # 🎬 THUMB
-    thumb = Image.open(raw_path).resize((800, 400), Image.LANCZOS)
+    # ─────────────
+    # 🎬 THUMB (RADIUS = 50 🔥)
+    # ─────────────
+    thumb = Image.open(raw_path).resize((760, 380), Image.LANCZOS)
     thumb = ImageEnhance.Sharpness(thumb).enhance(1.3)
 
-    thumb_x, thumb_y = 250, 120
+    tx, ty = 240, 120
 
     # shadow
-    shadow = Image.new("RGBA", (820, 420), (0, 0, 0, 0))
-    sdraw = ImageDraw.Draw(shadow)
-    sdraw.rounded_rectangle((10, 10, 810, 410), 40, fill=(0, 0, 0, 120))
-    shadow = shadow.filter(ImageFilter.GaussianBlur(20))
-    base.paste(shadow, (thumb_x-10, thumb_y-10), shadow)
+    tshadow = Image.new("RGBA", (780, 400), (0, 0, 0, 0))
+    sd = ImageDraw.Draw(tshadow)
+    sd.rounded_rectangle((10, 10, 770, 390),
+                         50, fill=(0, 0, 0, 150))
+    tshadow = tshadow.filter(ImageFilter.GaussianBlur(25))
 
-    mask = rounded_mask((800, 400), 40)
-    base.paste(thumb, (thumb_x, thumb_y), mask)
+    base.paste(tshadow, (tx-10, ty-10), tshadow)
 
-    # 🔲 BORDER
-    box = (thumb_x, thumb_y, thumb_x + 800, thumb_y + 400)
+    tmask = rounded_mask((760, 380), 50)  # 👈 RADIUS 50
+    base.paste(thumb, (tx, ty), tmask)
 
-    for i in range(6):
+    # ─────────────
+    # 🔮 PURPLE GLOW BORDER
+    # ─────────────
+    for i in range(8):
         draw.rounded_rectangle(
-            (box[0]-i, box[1]-i, box[2]+i, box[3]+i),
-            radius=40,
-            outline=(ACCENT[0], ACCENT[1], ACCENT[2], 40),
+            (tx-i, ty-i, tx+760+i, ty+380+i),
+            radius=50,
+            outline=(ACCENT[0], ACCENT[1], ACCENT[2], 30),
             width=2
         )
 
-    draw.rounded_rectangle(box, radius=40, outline=ACCENT, width=3)
+    draw.rounded_rectangle(
+        (tx, ty, tx+760, ty+380),
+        radius=50,
+        outline=ACCENT,
+        width=3
+    )
 
-    # ⏱️ PROGRESS BAR
+    # ─────────────
+    # ⏱️ PROGRESS BAR (WITH GLOW DOT)
+    # ─────────────
     try:
         parts = duration_text.split(":")
         total_sec = int(parts[0]) * 60 + int(parts[1])
@@ -89,77 +124,71 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
 
     current_sec = int(total_sec * 0.15)
 
-    bar_x = 140
-    top = 100
-    bottom = 620
+    bar_x = 130
+    top, bottom = 110, 610
 
-    draw.line((bar_x, top, bar_x, bottom), fill=(200, 200, 200, 120), width=4)
+    draw.line((bar_x, top, bar_x, bottom),
+              fill=(200, 200, 200, 100), width=4)
 
-    progress_y = bottom - int((bottom - top) * (current_sec / total_sec))
+    py = bottom - int((bottom-top) * (current_sec/total_sec))
 
-    draw.line((bar_x, progress_y, bar_x, bottom), fill=ACCENT, width=4)
+    draw.line((bar_x, py, bar_x, bottom),
+              fill=ACCENT, width=4)
 
-    # dot shadow
-    for i in range(3):
+    # glow dot
+    for i in range(4):
         draw.ellipse(
-            (bar_x-8-i, progress_y-8-i, bar_x+8+i, progress_y+8+i),
+            (bar_x-8-i, py-8-i, bar_x+8+i, py+8+i),
             fill=(ACCENT[0], ACCENT[1], ACCENT[2], 40)
         )
 
-    draw.ellipse((bar_x-6, progress_y-6, bar_x+6, progress_y+6), fill=ACCENT)
+    draw.ellipse((bar_x-6, py-6, bar_x+6, py+6), fill=ACCENT)
 
+    # ─────────────
     # 🕒 TIME
+    # ─────────────
     def fmt(sec):
-        m = sec // 60
-        s = sec % 60
-        return f"{m:02}:{s:02}"
+        return f"{sec//60:02}:{sec%60:02}"
 
-    draw.text((85, 60), fmt(current_sec), fill=ACCENT, font=font_artist)
-    draw.text((85, 640), duration_text, fill=ACCENT, font=font_artist)
+    draw.text((80, 60), fmt(current_sec), fill=ACCENT, font=font_artist)
+    draw.text((80, 640), duration_text, fill=ACCENT, font=font_artist)
 
+    # ─────────────
     # 📝 TEXT
-    def wrap_text(text, font, max_width):
+    # ─────────────
+    def wrap(text):
         words = text.split()
-        lines = []
-        current = ""
-
-        for word in words:
-            test = current + " " + word if current else word
-            bbox = draw.textbbox((0, 0), test, font=font)
-            w = bbox[2] - bbox[0]
-
-            if w <= max_width:
-                current = test
+        lines, cur = [], ""
+        for w in words:
+            test = cur + " " + w if cur else w
+            if draw.textlength(test, font=font_title) < 700:
+                cur = test
             else:
-                lines.append(current)
-                current = word
-
-        if current:
-            lines.append(current)
-
+                lines.append(cur)
+                cur = w
+        lines.append(cur)
         return lines[:2]
 
     title = re.sub(r"\W+", " ", title)
 
-    text_x = 300
-    text_y = 550
+    tx2, ty2 = 300, 540
 
-    lines = wrap_text(title, font_title, 700)
+    for i, line in enumerate(wrap(title)):
+        draw.text((tx2, ty2 + i*50), line,
+                  fill="white", font=font_title)
 
-    for i, line in enumerate(lines):
-        draw.text((text_x, text_y + i * 50), line, fill="white", font=font_title)
+    draw.text((tx2, ty2 + 110),
+              channel[:35],
+              fill=(200, 200, 200),
+              font=font_artist)
 
-    draw.text(
-        (text_x, text_y + len(lines) * 50 + 5),
-        channel[:35],
-        fill=(200, 200, 200),
-        font=font_artist,
-    )
+    # DEV TEXT
+    draw.text((1020, 650),
+              "Dev :- Maanav",
+              fill=(220, 220, 220),
+              font=font_artist)
 
-    # DEV
-    draw.text((1050, 650), "Dev :- Maanav", fill=(220, 220, 220), font=font_artist)
-
-    base = ImageEnhance.Contrast(base).enhance(1.05)
+    base = ImageEnhance.Contrast(base).enhance(1.08)
     base.save(cache_path, quality=95)
 
     return cache_path
