@@ -10,13 +10,9 @@ from AxiomMusic import app
 CACHE_DIR = "cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
-# 🔥 better neon pink
 PINK = (255, 20, 147)
 
 
-# ─────────────────────────────
-# 🎨 THUMBNAIL RENDER
-# ─────────────────────────────
 def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_path):
 
     WIDTH = 1280
@@ -29,57 +25,53 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 28)
 
     # ─────────────
-    # 🌌 CINEMATIC BACKGROUND (FIXED)
+    # 🌌 BACKGROUND (SMOOTH + CLEAN)
     # ─────────────
-    bg = Image.open(raw_path).convert("RGB").resize((WIDTH, HEIGHT))
+    bg = Image.open(raw_path).convert("RGB").resize((WIDTH, HEIGHT), Image.LANCZOS)
 
-    # heavy blur
-    bg = bg.filter(ImageFilter.GaussianBlur(35))
+    bg = bg.filter(ImageFilter.GaussianBlur(32))
+    bg = ImageEnhance.Color(bg).enhance(1.25)
+    bg = ImageEnhance.Brightness(bg).enhance(0.6)
 
-    # color enhance
-    bg = ImageEnhance.Color(bg).enhance(1.3)
-    bg = ImageEnhance.Brightness(bg).enhance(0.55)
+    overlay = Image.new("RGB", (WIDTH, HEIGHT), (0, 50, 70))
+    bg = Image.blend(bg, overlay, 0.40)
 
-    # teal cinematic tone
-    overlay = Image.new("RGB", (WIDTH, HEIGHT), (0, 40, 50))
-    bg = Image.blend(bg, overlay, 0.45)
-
-    # vignette effect (fast version)
     vignette = Image.new("L", (WIDTH, HEIGHT), 0)
-    draw_v = ImageDraw.Draw(vignette)
-    draw_v.ellipse(
-        (-WIDTH//2, -HEIGHT//2, WIDTH*1.5, HEIGHT*1.5),
-        fill=255
+    ImageDraw.Draw(vignette).ellipse(
+        (-WIDTH//2, -HEIGHT//2, WIDTH*1.5, HEIGHT*1.5), fill=255
     )
-    vignette = vignette.filter(ImageFilter.GaussianBlur(120))
+    vignette = vignette.filter(ImageFilter.GaussianBlur(140))
 
-    dark_layer = Image.new("RGB", (WIDTH, HEIGHT), (0, 0, 0))
-    bg = Image.composite(bg, dark_layer, vignette)
+    dark = Image.new("RGB", (WIDTH, HEIGHT), (0, 0, 0))
+    bg = Image.composite(bg, dark, vignette)
 
     base.paste(bg, (0, 0))
-    draw = ImageDraw.Draw(base)
 
     # ─────────────
-    # 🎬 MAIN THUMB
+    # 🎬 MAIN THUMB (HIGH QUALITY)
     # ─────────────
-    thumb = Image.open(raw_path).resize((800, 400))
+    thumb = Image.open(raw_path).resize((800, 400), Image.LANCZOS)
+    thumb = ImageEnhance.Sharpness(thumb).enhance(1.4)
+
     thumb_x, thumb_y = 250, 120
     base.paste(thumb, (thumb_x, thumb_y))
 
+    draw = ImageDraw.Draw(base)
+
     # ─────────────
-    # 💖 NEON BORDER (ENHANCED)
+    # 💖 THIN NEON BORDER (FIXED)
     # ─────────────
     box = (thumb_x, thumb_y, thumb_x + 800, thumb_y + 400)
 
-    for i in range(15):  # stronger glow
+    for i in range(6):  # 👈 pehle 15 tha
         draw.rounded_rectangle(
             (box[0]-i, box[1]-i, box[2]+i, box[3]+i),
             radius=30,
-            outline=(PINK[0], PINK[1], PINK[2], 20),
-            width=2
+            outline=(PINK[0], PINK[1], PINK[2], 30),
+            width=1
         )
 
-    draw.rounded_rectangle(box, radius=30, outline=PINK, width=4)
+    draw.rounded_rectangle(box, radius=30, outline=PINK, width=2)
 
     # ─────────────
     # ⏱️ PROGRESS BAR
@@ -92,28 +84,28 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
 
     current_sec = int(total_sec * 0.15)
 
-    bar_x = 120
+    bar_x = 130  # 👈 thoda right shift
     top = 100
     bottom = 620
 
-    draw.line((bar_x, top, bar_x, bottom), fill=(200, 200, 200, 80), width=6)
+    draw.line((bar_x, top, bar_x, bottom), fill=(200, 200, 200, 90), width=5)
 
     progress_y = bottom - int((bottom - top) * (current_sec / total_sec))
 
-    draw.line((bar_x, progress_y, bar_x, bottom), fill=PINK, width=6)
+    draw.line((bar_x, progress_y, bar_x, bottom), fill=PINK, width=5)
 
-    draw.ellipse((bar_x-10, progress_y-10, bar_x+10, progress_y+10), fill=PINK)
+    draw.ellipse((bar_x-7, progress_y-7, bar_x+7, progress_y+7), fill=PINK)
 
     # ─────────────
-    # 🕒 TIME TEXT
+    # 🕒 TIME TEXT (ALIGNED)
     # ─────────────
     def fmt(sec):
         m = sec // 60
         s = sec % 60
         return f"{m:02}:{s:02}"
 
-    draw.text((50, 60), fmt(current_sec), fill=PINK, font=font_artist)
-    draw.text((50, 640), duration_text, fill=PINK, font=font_artist)
+    draw.text((80, 60), fmt(current_sec), fill=PINK, font=font_artist)
+    draw.text((80, 640), duration_text, fill=PINK, font=font_artist)
 
     # ─────────────
     # 📝 TEXT
@@ -157,12 +149,12 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     )
 
     # ─────────────
-    # ✨ FINAL TOUCH
+    # ✨ FINAL SHARP OUTPUT
     # ─────────────
-    base = ImageEnhance.Contrast(base).enhance(1.08)
-    base = ImageEnhance.Sharpness(base).enhance(1.25)
+    base = ImageEnhance.Contrast(base).enhance(1.1)
+    base = ImageEnhance.Sharpness(base).enhance(1.3)
 
-    base.convert("RGB").save(cache_path)
+    base.convert("RGB").save(cache_path, quality=95)
 
     return cache_path
 
