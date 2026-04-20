@@ -10,11 +10,12 @@ from AxiomMusic import app
 CACHE_DIR = "cache"
 os.makedirs(CACHE_DIR, exist_ok=True)
 
-PINK = (255, 0, 150)
+# 🔥 better neon pink
+PINK = (255, 20, 147)
 
 
 # ─────────────────────────────
-# 🎨 THUMBNAIL RENDER (UPDATED)
+# 🎨 THUMBNAIL RENDER
 # ─────────────────────────────
 def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_path):
 
@@ -28,15 +29,34 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     font_artist = ImageFont.truetype("AxiomMusic/assets/font.ttf", 28)
 
     # ─────────────
-    # 🌌 BLUR BACKGROUND
+    # 🌌 CINEMATIC BACKGROUND (FIXED)
     # ─────────────
-    bg = Image.open(raw_path).convert("RGBA").resize((WIDTH, HEIGHT))
-    bg = bg.filter(ImageFilter.GaussianBlur(25))
+    bg = Image.open(raw_path).convert("RGB").resize((WIDTH, HEIGHT))
 
-    dark = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 140))
-    bg = Image.alpha_composite(bg, dark)
+    # heavy blur
+    bg = bg.filter(ImageFilter.GaussianBlur(35))
 
-    base = Image.alpha_composite(bg, base)
+    # color enhance
+    bg = ImageEnhance.Color(bg).enhance(1.3)
+    bg = ImageEnhance.Brightness(bg).enhance(0.55)
+
+    # teal cinematic tone
+    overlay = Image.new("RGB", (WIDTH, HEIGHT), (0, 40, 50))
+    bg = Image.blend(bg, overlay, 0.45)
+
+    # vignette effect (fast version)
+    vignette = Image.new("L", (WIDTH, HEIGHT), 0)
+    draw_v = ImageDraw.Draw(vignette)
+    draw_v.ellipse(
+        (-WIDTH//2, -HEIGHT//2, WIDTH*1.5, HEIGHT*1.5),
+        fill=255
+    )
+    vignette = vignette.filter(ImageFilter.GaussianBlur(120))
+
+    dark_layer = Image.new("RGB", (WIDTH, HEIGHT), (0, 0, 0))
+    bg = Image.composite(bg, dark_layer, vignette)
+
+    base.paste(bg, (0, 0))
     draw = ImageDraw.Draw(base)
 
     # ─────────────
@@ -47,22 +67,22 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     base.paste(thumb, (thumb_x, thumb_y))
 
     # ─────────────
-    # 💖 NEON BORDER
+    # 💖 NEON BORDER (ENHANCED)
     # ─────────────
     box = (thumb_x, thumb_y, thumb_x + 800, thumb_y + 400)
 
-    for i in range(10):
+    for i in range(15):  # stronger glow
         draw.rounded_rectangle(
             (box[0]-i, box[1]-i, box[2]+i, box[3]+i),
             radius=30,
-            outline=(255, 0, 150, 25),
+            outline=(PINK[0], PINK[1], PINK[2], 20),
             width=2
         )
 
     draw.rounded_rectangle(box, radius=30, outline=PINK, width=4)
 
     # ─────────────
-    # ⏱️ PROGRESS BAR (FAKE ANIMATION STYLE)
+    # ⏱️ PROGRESS BAR
     # ─────────────
     try:
         parts = duration_text.split(":")
@@ -70,22 +90,18 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     except:
         total_sec = 100
 
-    # random-like progress (har song pe change feel hoga)
     current_sec = int(total_sec * 0.15)
 
     bar_x = 120
     top = 100
     bottom = 620
 
-    # background line
     draw.line((bar_x, top, bar_x, bottom), fill=(200, 200, 200, 80), width=6)
 
     progress_y = bottom - int((bottom - top) * (current_sec / total_sec))
 
-    # progress fill
     draw.line((bar_x, progress_y, bar_x, bottom), fill=PINK, width=6)
 
-    # dot
     draw.ellipse((bar_x-10, progress_y-10, bar_x+10, progress_y+10), fill=PINK)
 
     # ─────────────
@@ -143,8 +159,8 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
     # ─────────────
     # ✨ FINAL TOUCH
     # ─────────────
-    base = ImageEnhance.Contrast(base).enhance(1.05)
-    base = ImageEnhance.Sharpness(base).enhance(1.2)
+    base = ImageEnhance.Contrast(base).enhance(1.08)
+    base = ImageEnhance.Sharpness(base).enhance(1.25)
 
     base.convert("RGB").save(cache_path)
 
@@ -152,7 +168,7 @@ def _make_thumb(raw_path, title, channel, duration_text, player_username, cache_
 
 
 # ─────────────────────────────
-# 🚀 MAIN FUNCTION (UNCHANGED)
+# 🚀 MAIN FUNCTION
 # ─────────────────────────────
 async def get_thumb(videoid: str, player_username: str = None):
 
