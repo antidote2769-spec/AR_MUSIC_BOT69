@@ -16,19 +16,20 @@
 from pyrogram.types import InlineKeyboardButton
 import config
 from AxiomMusic import app
+from utils.button_colors import get_btn_color
 
 
 def start_panel(_):
     buttons = [
         [
             InlineKeyboardButton(
-                text=_["S_B_1"],
+                text=f"{get_btn_color(_['S_B_1'])} {_['S_B_1']}",
                 url=f"https://t.me/{app.username}?startgroup=true",
             )
         ],
         [
             InlineKeyboardButton(
-                text=_["S_B_2"],
+                text=f"{get_btn_color(_['S_B_2'])} {_['S_B_2']}",
                 url=config.SUPPORT_CHANNEL,
             ),
         ],
@@ -40,27 +41,33 @@ def private_panel(_):
     buttons = [
         [
             InlineKeyboardButton(
-                text=_["S_B_3"],
+                text=f"{get_btn_color(_['S_B_3'])} {_['S_B_3']}",
                 url=f"https://t.me/{app.username}?startgroup=true",
             ),
         ],
         [
-            InlineKeyboardButton(text=_["S_B_5"], user_id=config.OWNER_ID),
-            InlineKeyboardButton(text="📼ʏᴛ-ᴀᴘɪ", callback_data="api_status"),
+            InlineKeyboardButton(
+                text=f"{get_btn_color(_['S_B_5'])} {_['S_B_5']}",
+                user_id=config.OWNER_ID
+            ),
+            InlineKeyboardButton(
+                text=f"{get_btn_color('📼ʏᴛ-ᴀᴘɪ')} 📼ʏᴛ-ᴀᴘɪ",
+                callback_data="api_status"
+            ),
         ],
         [
             InlineKeyboardButton(
-                text=_["S_B_6"],
+                text=f"{get_btn_color(_['S_B_6'])} {_['S_B_6']}",
                 url=config.SUPPORT_CHAT,
             ),
             InlineKeyboardButton(
-                text=_["S_B_2"],
+                text=f"{get_btn_color(_['S_B_2']+'2')} {_['S_B_2']}",
                 url=config.SUPPORT_CHANNEL,
             ),
         ],
         [
             InlineKeyboardButton(
-                text=_["S_B_4"],
+                text=f"{get_btn_color(_['S_B_4'])} {_['S_B_4']}",
                 callback_data="settings_back_helper",
             ),
         ],
