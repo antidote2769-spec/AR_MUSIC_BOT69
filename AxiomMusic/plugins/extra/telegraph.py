@@ -19,7 +19,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from AxiomMusic import app
 
 def upload_file(file_path):
-    url = "https://catbox.moe/user/api.php"
+    url = "https://catbox.moe/user/api.jpg"
     data = {"reqtype": "fileupload", "json": "true"}
     with open(file_path, "rb") as file:
         response = requests.post(url, data=data, files={"fileToUpload": file})
