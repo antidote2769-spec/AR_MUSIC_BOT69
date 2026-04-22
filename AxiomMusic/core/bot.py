@@ -44,7 +44,7 @@ class Axiomm(Client):
         try:
             await self.send_message(
                 chat_id=config.LOGGER_ID,
-                text=f"<u><blockquote expandable><b>» {self.mention} ʙᴏᴛ sᴛᴀʀᴛᴇᴅ :</b></blockquote><u>\n\n<blockquote expandable><b>ɪᴅ : <code>{self.id}</code>\nɴᴀᴍᴇ : {self.name}\nᴜsᴇʀɴᴀᴍᴇ : @{self.username}</b></blockquote>",
+                text=f"<blockquote><b><u>» ᴛʜє ᴧxɪσϻ ϻυsɪᴄ ʙσᴛ sᴛᴧʀᴛєᴅ :</u></b></blockquote><u>\n\n<blockquote expandable><b>✧ ηᴧϻє : {self.mention}\n✧ υsєʀηᴧϻє : @{self.username}\n✧ ɪᴅ : <code>{self.id}</code></b></blockquote>",
             )
         except (errors.ChannelInvalid, errors.PeerIdInvalid):
             LOGGER(__name__).error(
