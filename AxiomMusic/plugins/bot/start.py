@@ -128,9 +128,10 @@ async def start_pm(client, message: Message, _):
             if await is_on_off(2):
                 await app.send_message(
                     chat_id=config.LOGGER_ID,
-                    text=f"<blockquote<b>✧ {message.from_user.mention} checked track info,/blockquote>\n\n"
-                         f"blockquote>✧ ID: <code>{message.from_user.id}</code>\n"
-                         f"✧ User: @{message.from_user.username} </b></blockquote>",
+                    text=f"<blockquote><b><u>✧ ηєᴡ υsєʀ sᴛᴧʀᴛєᴅ ᴛʜє ᴧxɪσϻ ϻυsɪᴄ ʙσᴛ ᴛσ ᴄʜєᴄᴋ ᴛʀᴧᴄᴋ ɪηғσ.</u></b></blockquote>\n\n"
+                         f"<blockquote><b>✧ ηᴧϻє:- {message.from_user.mention}\n"
+                         f"<b>✧ υsєʀηᴧϻє:-</b> @{message.from_user.username}\n"
+                         f"<b>✧ υɪᴅ:-</b> <code>{message.from_user.id}</code>.</blockquote>",
                 )
             return
 
@@ -149,9 +150,10 @@ async def start_pm(client, message: Message, _):
     if await is_on_off(2):
         await app.send_message(
             chat_id=config.LOGGER_ID,
-            text=f"<blockquote><b>✧ {message.from_user.mention} started bot</blockquote>\n\n"
-                 f"<blockquote>✧ ID: <code>{message.from_user.id}</code>\n"
-                 f"✧ User: @{message.from_user.username} </b></blockquote>",
+            text=f"<blockquote><b><u>❖ ηєᴡ υsєʀ sᴛᴧʀᴛєᴅ ᴛʜє ᴧxɪσϻ ϻυsɪᴄ ʙσᴛ.</u></b></blockquote>\n\n"
+                 f"<blockquote><b>✧ ηᴧϻє:-<b> {message.from_user.mention}\n"
+                 f"<b>✧ υsєʀηᴧϻє:-</b> @{message.from_user.username}\n"
+                 f"<b>✧ υɪᴅ:-</b> <code>{message.from_user.id}</code></blockquote>",
         )
 
 
