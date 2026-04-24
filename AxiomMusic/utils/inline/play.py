@@ -82,7 +82,6 @@ def stream_markup_timer(_, chat_id, played, dur):
         ],
         [
             InlineKeyboardButton("⪻ -𝟸5s", callback_data="seek_backward_20"),
-            InlineKeyboardButton(text=_["H_B_34"], callback_data="help_callback hb10"),
             InlineKeyboardButton("+𝟸5s ⪼", callback_data="seek_forward_20"),
         ],
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
@@ -101,7 +100,6 @@ def stream_markup(_, chat_id):
         ],
         [
             InlineKeyboardButton("⪻ -𝟸5s", callback_data="seek_backward_20"),
-            InlineKeyboardButton(text=_["H_B_34"], callback_data="help_callback hb10"),
             InlineKeyboardButton("+𝟸5s ⪼", callback_data="seek_forward_20"),
         ],
         [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
