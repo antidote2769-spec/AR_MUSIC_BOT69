@@ -73,7 +73,13 @@ async def play_commnd(
     plist_type = None
     spotify = None
     user_id = message.from_user.id
-    user_name = message.from_user.first_name
+    user = message.from_user
+    user_name = (
+        user.first_name
+        or user.last_name
+        or user.username
+        or f"user_{user.id}"
+    )
     audio_telegram = (
         (message.reply_to_message.audio or message.reply_to_message.voice)
         if message.reply_to_message
@@ -292,7 +298,7 @@ async def play_commnd(
                     message.from_user.id,
                     url,
                     chat_id,
-                    message.from_user.first_name,
+                    user_name,
                     message.chat.id,
                     video=video,
                     streamtype="index",
@@ -439,7 +445,13 @@ async def play_music(client, CallbackQuery, _):
         chat_id, channel = await get_channeplayCB(_, cplay, CallbackQuery)
     except:
         return
-    user_name = CallbackQuery.from_user.first_name
+    user = CallbackQuery.from_user
+    user_name = (
+        user.first_name
+        or user.last_name
+        or user.username
+        or f"user_{user.id}"
+    )
     try:
         await CallbackQuery.message.delete()
         await CallbackQuery.answer()
@@ -527,7 +539,13 @@ async def play_playlists_command(client, CallbackQuery, _):
         chat_id, channel = await get_channeplayCB(_, cplay, CallbackQuery)
     except:
         return
-    user_name = CallbackQuery.from_user.first_name
+    user = CallbackQuery.from_user
+    user_name = (
+        user.first_name
+        or user.last_name
+        or user.username
+        or "Unknown"
+    )
     await CallbackQuery.message.delete()
     try:
         await CallbackQuery.answer()
