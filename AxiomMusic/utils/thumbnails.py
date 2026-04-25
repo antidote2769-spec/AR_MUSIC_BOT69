@@ -22,6 +22,7 @@ W, H = 1280, 720
 BG_COLOR   = (45,  60,  65)
 TEXT_WHITE = (255, 255, 255)
 TEXT_GRAY  = (175, 182, 188)
+REQ_COLOR = (255, 215, 0)  
 
 # In-memory set: tracks videoids already generated this session
 # Prevents regenerating same thumb if cache/ file was wiped by Heroku
@@ -119,7 +120,7 @@ def _truncate(draw, text, font, max_w):
     return text + "…"
 
 
-async def get_thumb(videoid: str, user_id=None) -> str:
+async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     output = f"cache/{videoid}.png"
     cache  = f"cache/thumb{videoid}.jpg"
     os.makedirs("cache", exist_ok=True)
@@ -170,12 +171,14 @@ async def get_thumb(videoid: str, user_id=None) -> str:
     f_tit = _get_font(FONT_BOLD,   44)
     f_s   = _get_font(FONT_NORMAL, 30)
     f_wm  = _get_font(FONT_BOLD,   24)
+    f_req = _get_font(FONT_BOLD, 30)
 
     draw.text((105, 44),  duration,                                                  font=f_t,   fill=c_base,     anchor="mm")
-    draw.text((105, 598), "00:25",                                                   font=f_t,   fill=c_base,     anchor="mm")
-    draw.text((685, 592), _truncate(draw, title, f_tit, 800),                        font=f_tit, fill=TEXT_WHITE, anchor="mm")
-    draw.text((685, 640), _truncate(draw, f"{channel}  |  {views}", f_s, 840),       font=f_s,   fill=TEXT_GRAY,  anchor="mm")
-    draw.text((1255, 695), "Dev :- Maanav",                                           font=f_wm,  fill=TEXT_WHITE, anchor="rd")
+    draw.text((105, 598), "00:39",                                                   font=f_t,   fill=c_base,     anchor="mm")
+    draw.text((685, 580), _truncate(draw, title, f_tit, 800),                        font=f_tit, fill=TEXT_WHITE, anchor="mm")
+    draw.text((685, 630), _truncate(draw, f"{channel}  |  {views}", f_s, 840),       font=f_s, fill=TEXT_GRAY, anchor="mm")
+    draw.text((685, 680), _truncate(draw, f"Requested by: {user_name}", f_req, 800), font=f_req, fill=REQ_COLOR, anchor="mm")
+    draw.text((1255, 695), "Dev :- Maanav",                                          font=f_wm,  fill=TEXT_WHITE, anchor="rd")
 
     base.save(output, "PNG", optimize=True)
 
