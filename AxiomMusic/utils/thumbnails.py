@@ -204,7 +204,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
 
     total_w = label_w + name_w
 
-    start_x = 685 - total_w // 2
+    start_x = 680 - total_w // 2
     y = 680
 
     # 🔹 label (palette color = c_base)
