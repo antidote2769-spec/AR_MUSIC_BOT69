@@ -177,7 +177,18 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     draw.text((105, 598), "00:39",                                                   font=f_t,   fill=c_base,     anchor="mm")
     draw.text((685, 580), _truncate(draw, title, f_tit, 800),                        font=f_tit, fill=TEXT_WHITE, anchor="mm")
     draw.text((685, 630), _truncate(draw, f"{channel}  |  {views}", f_s, 840),       font=f_s, fill=TEXT_GRAY, anchor="mm")
-    draw.text((685, 680), _truncate(draw, f"Requested by: {user_name}", f_req, 800), font=f_req, fill=REQ_COLOR, anchor="mm")
+    safe_name = str(user_name).strip() if user_name else "Unknown"
+
+    if safe_name.lower() in ["none", "", "-", "null"]:
+    safe_name = "Unknown"
+
+    draw.text(
+        (685, 680),
+        _truncate(draw, f"Requested by: {safe_name}", f_req, 800),
+        font=f_req,
+        fill=REQ_COLOR,
+        anchor="mm"
+    )
     draw.text((1255, 695), "Dev :- Maanav",                                          font=f_wm,  fill=TEXT_WHITE, anchor="rd")
 
     base.save(output, "PNG", optimize=True)
