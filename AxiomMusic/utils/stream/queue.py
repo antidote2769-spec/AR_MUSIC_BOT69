@@ -37,6 +37,15 @@ async def put_queue(
         duration_in_seconds = time_to_seconds(duration) - 3
     except:
         duration_in_seconds = 0
+    # FIX user name properly
+    if not user or str(user).strip().lower() in ["", "none", "null", "-"]:
+        try:
+            from AxiomMusic import app
+            member = await app.get_users(user_id)
+            user = member.first_name
+        except:
+            user = "Unknown"
+
     put = {
         "title": title,
         "dur": duration,
@@ -84,6 +93,15 @@ async def put_queue_index(
             dur = 0
     else:
         dur = 0
+    # FIX user name properly
+    if not user or str(user).strip().lower() in ["", "none", "null", "-"]:
+        try:
+            from AxiomMusic import app
+            member = await app.get_users(user_id)
+            user = member.first_name
+        except:
+            user = "Unknown"
+
     put = {
         "title": title,
         "dur": duration,
