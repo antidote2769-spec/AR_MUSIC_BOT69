@@ -74,7 +74,12 @@ async def play_commnd(
     spotify = None
     user_id = message.from_user.id
     user = message.from_user
-    user_name = user.mention if user else "Unknown"
+    user_name = (
+        user.first_name
+        or user.last_name
+        or user.username
+        or "Unknown"
+    )
     audio_telegram = (
         (message.reply_to_message.audio or message.reply_to_message.voice)
         if message.reply_to_message
@@ -535,7 +540,12 @@ async def play_playlists_command(client, CallbackQuery, _):
     except:
         return
     user = CallbackQuery.from_user
-    user_name = user.mention if user else "Unknown"
+    user_name = (
+        user.first_name
+        or user.last_name
+        or user.username
+        or "Unknown"
+    )
     await CallbackQuery.message.delete()
     try:
         await CallbackQuery.answer()
