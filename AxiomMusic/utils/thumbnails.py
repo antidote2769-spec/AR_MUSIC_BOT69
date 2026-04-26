@@ -8,6 +8,40 @@ from functools import lru_cache
 from typing import Tuple
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
+# 🔥 fallback fonts (ONLY for username)
+FONT_FALLBACKS = [
+    os.path.join(ASSETS, "NotoSans-Regular.ttf"),
+    os.path.join(ASSETS, "NotoSansSymbols-Regular.ttf"),
+    os.path.join(ASSETS, "seguiemj.ttf"),
+    os.path.join(ASSETS, "arial.ttf"),
+    FONT_NORMAL
+]
+
+@lru_cache(maxsize=10)
+def _get_fallback_fonts(size: int):
+    fonts = []
+    for path in FONT_FALLBACKS:
+        try:
+            fonts.append(ImageFont.truetype(path, size))
+        except:
+            continue
+    if not fonts:
+        fonts.append(ImageFont.load_default())
+    return fonts
+
+
+def draw_text_with_fallback(draw, position, text, fonts, fill):
+    x, y = position
+    for char in text:
+        for font in fonts:
+            try:
+                if font.getbbox(char):
+                    draw.text((x, y), char, font=font, fill=fill)
+                    x += font.getlength(char)
+                    break
+            except:
+                continue
+
 BASE_DIR    = os.path.dirname(os.path.abspath(__file__))
 ASSETS      = os.path.join(BASE_DIR, "..", "assets")
 FONT_BOLD   = os.path.join(ASSETS, "f.ttf")
@@ -193,7 +227,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
 
     # fonts
     f_req_label = _get_font(FONT_BOLD, 30)     # "Requested by:"
-    f_req_name = ImageFont.load_default()   # username
+    fonts = _get_fallback_fonts(30)   # username
 
     label_text = "Requested by: "
     name_text  = safe_name
@@ -220,11 +254,12 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
         fill=c_base
     )
 
-    draw.text(
+    draw_text_with_fallback(
+        draw,
         (start_x + label_w, name_y),
         name_text,
-        font=f_req_name,
-        fill=NAME_COLOR
+        fonts,
+        NAME_COLOR
     )
     draw.text((1255, 695), "Dev :- Maanav",                                          font=f_wm,  fill=TEXT_WHITE, anchor="rd")
 
