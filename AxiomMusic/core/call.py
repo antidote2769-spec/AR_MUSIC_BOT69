@@ -338,7 +338,7 @@ class Call(PyTgCalls):
                                 InlineKeyboardButton(
                                     "⋞ ᴄʟᴏsє ⋟", callback_data="close_message"
                                 ),
-                            ]
+                            ],
                             [
                                 InlineKeyboardButton(text=_["⌯ ᴅєᴠєʟᴏᴘєꝛ​ ⌯"], user_id=config.OWNER_ID
                                 ),
