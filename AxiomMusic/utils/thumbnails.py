@@ -42,7 +42,7 @@ def draw_text_with_fallback(draw, position, text, fonts, fill):
     for char in text:
         for font in fonts:
             try:
-                if font.getbbox(char):
+                if font.getmask(char).getbbox():
                     draw.text((x, y), char, font=font, fill=fill)
                     x += font.getlength(char)
                     break
