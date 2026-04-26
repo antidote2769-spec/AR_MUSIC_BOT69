@@ -179,6 +179,11 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     draw.text((685, 630), _truncate(draw, f"{channel}  |  {views}", f_s, 840),       font=f_s, fill=TEXT_GRAY, anchor="mm")
     safe_name = str(user_name).strip() if user_name else "Unknown"
 
+    print(f"[DEBUG] user_name = {user_name}")
+
+    # normalize dashes
+    safe_name = safe_name.replace("–", "-").replace("—", "-").strip()
+
     if safe_name.lower() in ["none", "", "-", "null"]:
         safe_name = "Unknown"
 
