@@ -340,14 +340,14 @@ class Call(PyTgCalls):
                                 ),
                             ],
                             [
-                                InlineKeyboardButton(text=_["⌯ ᴅєᴠєʟᴏᴘєꝛ​ ⌯"], user_id=config.OWNER_ID
+                                InlineKeyboardButton(text=_["⌯ ᴅєᴠєʟᴏᴘєꝛ​ ⌯"], user_id=config.OWNER_USERNAME
                                 ),
                             ]
                         ]
                     )
                     await app.send_message(
                         chat_id,
-                        "<blockquote expandable><b>🎵 𝐓ʜᴇ 𝐐ᴜᴇᴜᴇ 𝐇ᴀs 𝐅ɪɴɪsʜᴇᴅ. 𝐔sᴇ /play 𝐓ᴏ 𝐀ᴅᴅ 𝐌ᴏʀᴇ 𝐒ᴏɴɢs!!</b></blockquote>",
+                        "<b>🎵 𝐓ʜᴇ 𝐐ᴜᴇᴜᴇ 𝐇ᴀs 𝐅ɪɴɪsʜᴇᴅ. 𝐔sᴇ /play 𝐓ᴏ 𝐀ᴅᴅ 𝐌ᴏʀᴇ 𝐒ᴏɴɢs!!</b>",
                         reply_markup=buttons,
                     )
                 except:
@@ -367,16 +367,16 @@ class Call(PyTgCalls):
                                 InlineKeyboardButton(
                                     "⋞ ᴄʟᴏsє ⋟", callback_data="close_message"
                                 ),
-                            ],
+                            ]
                             [
-                                InlineKeyboardButton(text=_["⌯ ᴅєᴠєʟᴏᴘєꝛ​ ⌯"], user_id=config.OWNER_ID
+                                InlineKeyboardButton(text=_["⌯ ᴅєᴠєʟᴏᴘєꝛ​ ⌯"], user_id=config.OWNER_USERNAME
                                 ),
                             ]
                         ]
                     )
                     await app.send_message(
                         chat_id,
-                        "<blockquote expandable><b>🎵 𝐓ʜᴇ 𝐐ᴜᴇᴜᴇ 𝐇ᴀs 𝐅ɪɴɪsʜᴇᴅ. 𝐔sᴇ /play 𝐓ᴏ 𝐀ᴅᴅ 𝐌ᴏʀᴇ 𝐒ᴏɴɢs!!</b></blockquote>",
+                        "<b>🎵 𝐓ʜᴇ 𝐐ᴜᴇᴜᴇ 𝐇ᴀs 𝐅ɪɴɪsʜᴇᴅ. 𝐔sᴇ /play 𝐓ᴏ 𝐀ᴅᴅ 𝐌ᴏʀᴇ 𝐒ᴏɴɢs!!</b>",
                         reply_markup=buttons,
                     )
                 except:
@@ -388,14 +388,7 @@ class Call(PyTgCalls):
         language = await get_lang(chat_id)
         _ = get_string(language)
         title = (check[0]["title"]).title()
-        user = check[0].get("by")
-
-        if not user or str(user).strip() in ["-", "None", "null", ""]:
-            try:
-                member = await app.get_users(check[0]["user_id"])
-                user = member.first_name
-            except:
-                user = "Unknown"
+        user = check[0]["by"]
         original_chat_id = check[0]["chat_id"]
         streamtype = check[0]["streamtype"]
         videoid = check[0]["vidid"]
