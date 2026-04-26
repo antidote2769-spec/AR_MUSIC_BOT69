@@ -233,7 +233,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     label_text = "Requested by: "
     name_text  = safe_name
 
-   label_w = draw.textlength(label_text, font=f_req_label)
+    label_w = draw.textlength(label_text, font=f_req_label)
 
     # 🔥 calculate width using fallback fonts
     name_w = 0
