@@ -23,10 +23,26 @@ for file in os.listdir(ASSETS):
         FONT_FALLBACKS.append(os.path.join(ASSETS, file))
 
 # 🔥 emoji font sabse upar
-FONT_FALLBACKS.insert(0, os.path.join(ASSETS, "seguiemj.ttf"))
+emoji_font = os.path.join(ASSETS, "seguiemj.ttf")
+if os.path.exists(emoji_font):
+    FONT_FALLBACKS.insert(0, emoji_font)
 
 # last fallback
 FONT_FALLBACKS.append(FONT_NORMAL)
+
+@lru_cache(maxsize=10)
+def _get_fallback_fonts(size: int):
+    fonts = []
+    for path in FONT_FALLBACKS:
+        try:
+            fonts.append(ImageFont.truetype(path, size))
+        except:
+            continue
+
+    if not fonts:
+        fonts.append(ImageFont.load_default())
+
+    return fonts
 
 def draw_text_with_fallback(draw, position, text, fonts, fill):
     x, y = position
@@ -243,13 +259,23 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     label_w = draw.textlength(label_text, font=f_req_label)
 
     # 🔥 calculate width using fallback fonts
-    name_w = sum(
-        next(
-            (font.getlength(char) for font in fonts if font.getmask(char).getbbox()),
-            fonts[-1].getlength(char)
-        )
-        for char in name_text
-    )
+    name_w = 0
+
+    for char in name_text:
+        added = False
+
+        for font in fonts:
+            try:
+                mask = font.getmask(char)
+                if mask and mask.getbbox():
+                    name_w += font.getlength(char)
+                    added = True
+                    break
+            except:
+                continue
+
+        if not added:
+            name_w += fonts[-1].getlength(char)
 
     total_w = label_w + name_w
 
