@@ -74,10 +74,17 @@ async def play_commnd(
     spotify = None
     user_id = message.from_user.id
     user = message.from_user
+
     if user:
-        user_name = user.first_name or user.username or "User"
+        user_name = " ".join(
+            filter(None, [user.first_name, user.last_name])
+        ).strip()
     else:
         user_name = "Unknown"
+
+    # safety (kabhi blank na aaye)
+    if not user_name:
+        user_name = f"user_{user_id}"
     audio_telegram = (
         (message.reply_to_message.audio or message.reply_to_message.voice)
         if message.reply_to_message
@@ -444,12 +451,12 @@ async def play_music(client, CallbackQuery, _):
     except:
         return
     user = CallbackQuery.from_user
-    user_name = (
-        user.first_name
-        or user.last_name
-        or user.username
-        or f"user_{user.id}"
-    )
+    user_name = " ".join(
+        filter(None, [user.first_name, user.last_name])
+    ).strip()
+
+    if not user_name:
+        user_name = user.username or f"user_{user.id}"
     try:
         await CallbackQuery.message.delete()
         await CallbackQuery.answer()
@@ -538,10 +545,16 @@ async def play_playlists_command(client, CallbackQuery, _):
     except:
         return
     user = CallbackQuery.from_user
+
     if user:
-        user_name = user.first_name or user.username or "User"
+        user_name = " ".join(
+            filter(None, [user.first_name, user.last_name])
+        ).strip()
     else:
         user_name = "Unknown"
+
+    if not user_name:
+        user_name = f"user_{user.id}"
         await CallbackQuery.message.delete()
     try:
         await CallbackQuery.answer()
