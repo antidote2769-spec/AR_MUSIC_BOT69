@@ -8,6 +8,13 @@ from functools import lru_cache
 from typing import Tuple
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
+
+BASE_DIR    = os.path.dirname(os.path.abspath(__file__))
+ASSETS      = os.path.join(BASE_DIR, "..", "assets")
+FONT_BOLD   = os.path.join(ASSETS, "f.ttf")
+FONT_NORMAL = os.path.join(ASSETS, "cfont.ttf")
+
+
 # 🔥 fallback fonts (ONLY for username)
 FONT_FALLBACKS = [
     os.path.join(ASSETS, "NotoSans-Regular.ttf"),
@@ -41,11 +48,6 @@ def draw_text_with_fallback(draw, position, text, fonts, fill):
                     break
             except:
                 continue
-
-BASE_DIR    = os.path.dirname(os.path.abspath(__file__))
-ASSETS      = os.path.join(BASE_DIR, "..", "assets")
-FONT_BOLD   = os.path.join(ASSETS, "f.ttf")
-FONT_NORMAL = os.path.join(ASSETS, "cfont.ttf")
 
 # ═══════════════════════════════════════════════════════════════════
 # THUMBNAIL GENERATOR - VERSION 4.1 (Performance Edition)
