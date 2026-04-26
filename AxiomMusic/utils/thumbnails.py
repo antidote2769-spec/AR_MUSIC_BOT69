@@ -16,38 +16,37 @@ FONT_NORMAL = os.path.join(ASSETS, "cfont.ttf")
 
 
 # 🔥 fallback fonts (ONLY for username)
-FONT_FALLBACKS = [
-    os.path.join(ASSETS, "NotoSans-Regular.ttf"),
-    os.path.join(ASSETS, "NotoSansSymbols-Regular.ttf"),
-    os.path.join(ASSETS, "seguiemj.ttf"),
-    os.path.join(ASSETS, "arial.ttf"),
-    FONT_NORMAL
-]
+FONT_FALLBACKS = []
 
-@lru_cache(maxsize=10)
-def _get_fallback_fonts(size: int):
-    fonts = []
-    for path in FONT_FALLBACKS:
-        try:
-            fonts.append(ImageFont.truetype(path, size))
-        except:
-            continue
-    if not fonts:
-        fonts.append(ImageFont.load_default())
-    return fonts
+for file in os.listdir(ASSETS):
+    if file.lower().endswith((".ttf", ".otf")):
+        FONT_FALLBACKS.append(os.path.join(ASSETS, file))
 
+# 🔥 emoji font sabse upar
+FONT_FALLBACKS.insert(0, os.path.join(ASSETS, "seguiemj.ttf"))
+
+# last fallback
+FONT_FALLBACKS.append(FONT_NORMAL)
 
 def draw_text_with_fallback(draw, position, text, fonts, fill):
     x, y = position
+
     for char in text:
+        drawn = False
+
         for font in fonts:
             try:
                 if font.getmask(char).getbbox():
                     draw.text((x, y), char, font=font, fill=fill)
                     x += font.getlength(char)
+                    drawn = True
                     break
             except:
                 continue
+
+        if not drawn:
+            draw.text((x, y), char, font=fonts[-1], fill=fill)
+            x += fonts[-1].getlength(char)
 
 # ═══════════════════════════════════════════════════════════════════
 # THUMBNAIL GENERATOR - VERSION 4.1 (Performance Edition)
@@ -214,6 +213,10 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     draw.text((685, 630), _truncate(draw, f"{channel}  |  {views}", f_s, 840),       font=f_s, fill=TEXT_GRAY, anchor="mm")
     safe_name = str(user_name).strip() if user_name else "Unknown"
 
+    # 🔥 YAHAN DALNA HAI
+    import unicodedata
+    safe_name = unicodedata.normalize("NFKC", safe_name)
+
     print(f"[DEBUG] user_name = {user_name}")
 
     # normalize dashes
@@ -228,7 +231,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
 
     # fonts
     f_req_label = _get_font(FONT_BOLD, 30)     # "Requested by:"
-    fonts = _get_fallback_fonts(27)   # username
+    fonts = _get_fallback_fonts(30)   # username
 
     label_text = "Requested by: "
     name_text  = safe_name
@@ -236,15 +239,13 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     label_w = draw.textlength(label_text, font=f_req_label)
 
     # 🔥 calculate width using fallback fonts
-    name_w = 0
-    for char in name_text:
-        for font in fonts:
-            try:
-                if font.getbbox(char):
-                    name_w += font.getlength(char)
-                    break
-            except:
-                continue
+    name_w = sum(
+        next(
+            (font.getlength(char) for font in fonts if font.getmask(char).getbbox()),
+            fonts[-1].getlength(char)
+        )
+        for char in name_text
+    )
 
     total_w = label_w + name_w
 
