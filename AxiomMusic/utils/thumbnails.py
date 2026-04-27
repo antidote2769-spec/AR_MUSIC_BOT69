@@ -301,15 +301,24 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
 
     total_w = label_w + name_w
 
-    start_x = 680 - total_w // 2
-    y = 680
+    center_x = W // 2
+    start_x = center_x - total_w // 2
+    y = 660
 
     # 🔥 height fix
     label_h = f_req_label.getbbox("A")[3]
     name_h = max(font.getbbox("A")[3] for font in fonts)
 
-    label_y = y
-    name_y  = y   # 🔥 same line pe laa diya
+    label_bbox = f_req_label.getbbox("Ag")
+    name_bbox  = fonts[0].getbbox("Ag")
+
+    label_height = label_bbox[3] - label_bbox[1]
+    name_height  = name_bbox[3] - name_bbox[1]
+
+    max_height = max(label_height, name_height)
+
+    label_y = y + (max_height - label_height) // 2
+    name_y  = y + (max_height - name_height) // 2   # 🔥 same line pe laa diya
 
     # 🔹 label (palette color = c_base)
     draw.text(
@@ -321,10 +330,10 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
 
     draw_text_with_fallback(
         draw,
-        (start_x + label_w, name_y),
+       (start_x + label_w, name_y),
         name_text,
-        fonts,
-        NAME_COLOR
+       fonts,
+       NAME_COLOR
     )
     draw.text((1255, 695), "Dev :- Maanav",                                          font=f_wm,  fill=TEXT_WHITE, anchor="rd")
 
