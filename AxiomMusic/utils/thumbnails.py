@@ -15,7 +15,32 @@ ASSETS      = os.path.join(BASE_DIR, "..", "assets")
 FONT_BOLD   = os.path.join(ASSETS, "f.ttf")
 FONT_NORMAL = os.path.join(ASSETS, "cfont.ttf")
 
+def clean_username(name: str) -> str:
+    import unicodedata
+    import re
 
+    if not name:
+        return "AxiomUser"
+
+    # normalize
+    name = unicodedata.normalize("NFKC", name)
+
+    # fancy → normal
+    decoded = unidecode(name)
+
+    # 🔥 agar readable hai to use kar
+    if re.match(r'^[A-Za-z0-9 _.-]{3,}$', decoded):
+        return decoded.strip()
+
+    # 🔥 warna soft clean
+    cleaned = re.sub(r'[^A-Za-z0-9 ]+', ' ', decoded)
+    cleaned = re.sub(r'\s+', ' ', cleaned).strip()
+
+    if len(cleaned) < 3:
+        return "AxiomUser"
+
+    return cleaned
+    
 # 🔥 fallback fonts (ONLY for username)
 FONT_FALLBACKS = []
 
@@ -232,23 +257,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     draw.text((105, 598), "00:17",                                                   font=f_t,   fill=c_base,     anchor="mm")
     draw.text((685, 580), _truncate(draw, title, f_tit, 800),                        font=f_tit, fill=TEXT_WHITE, anchor="mm")
     draw.text((685, 630), _truncate(draw, f"{channel}  |  {views}", f_s, 840),       font=f_s, fill=TEXT_GRAY, anchor="mm")
-    safe_name = str(user_name).strip() if user_name else "Unknown"
-
-    import unicodedata
-    from unidecode import unidecode
-
-    safe_name = unicodedata.normalize("NFKC", safe_name)
-    safe_name = unidecode(safe_name)
-
-    # 🔥 remove garbage chars
-    safe_name = re.sub(r'[^A-Za-z0-9 ]+', '', safe_name)
-
-    # 🔥 extra spaces clean
-    safe_name = re.sub(r'\s+', ' ', safe_name).strip()
-
-    # 🔥 fallback
-    if len(safe_name) < 2:
-        safe_name = "AxiomUser"
+    safe_name = clean_username(user_name)
 
     print(f"[DEBUG] user_name = {user_name}")
 
