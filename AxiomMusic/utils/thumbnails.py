@@ -254,26 +254,9 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     label_text = "Requested by: "
     name_text  = safe_name
 
-    label_w = draw.textlength(label_text, font=f_req_label)
-
-    # 🔥 calculate width using fallback fonts
-    name_w = 0
-
-    for char in name_text:
-        added = False
-
-        for font in fonts:
-            try:
-                mask = font.getmask(char)
-                if mask and mask.getbbox():
-                    name_w += font.getlength(char)
-                    added = True
-                    break
-            except:
-                continue
-
-        if not added:
-            name_w += fonts[-1].getlength(char)
+    # width calculate (same font)
+    label_w = draw.textlength(label_text, font=f_req)
+    name_w  = draw.textlength(name_text, font=f_req)
 
     total_w = label_w + name_w
 
@@ -281,37 +264,22 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     start_x = center_x - total_w // 2
     y = 660
 
-    # 🔥 height fix
-    label_h = f_req_label.getbbox("A")[3]
-    name_h = max(font.getbbox("A")[3] for font in fonts)
-
-    label_bbox = f_req_label.getbbox("Ag")
-    name_bbox  = fonts[0].getbbox("Ag")
-
-    label_height = label_bbox[3] - label_bbox[1]
-    name_height  = name_bbox[3] - name_bbox[1]
-
-    max_height = max(label_height, name_height)
-
-    label_y = y + (max_height - label_height) // 2
-    name_y  = y + (max_height - name_height) // 2   # 🔥 same line pe laa diya
-
     # label
     draw.text(
         (start_x, y),
         label_text,
         font=f_req,
         fill=c_base,
-        anchor="ls"
+        anchor="lm"
     )
 
-        # name (same font)
+    # name (same font)
     draw.text(
         (start_x + label_w, y),
         name_text,
         font=f_req,
         fill=NAME_COLOR,
-        anchor="ls"
+        anchor="lm"
     )
     draw.text((1255, 41), "Dev :- Maanav",                                          font=f_wm,  fill=TEXT_WHITE, anchor="rd")
 
