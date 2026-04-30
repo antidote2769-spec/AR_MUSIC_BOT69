@@ -281,7 +281,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
         fill=NAME_COLOR,
         anchor="lm"
     )
-    draw.text((1255, 41), "Dev :- Maanav",                                          font=f_wm,  fill=TEXT_WHITE, anchor="rd")
+    draw.text((1255, 45), "Dev :- Maanav",                                          font=f_wm,  fill=TEXT_WHITE, anchor="rd")
 
     base.save(output, "PNG", optimize=True)
 
