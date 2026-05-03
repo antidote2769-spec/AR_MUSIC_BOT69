@@ -420,16 +420,6 @@ async def play_commnd(
             thumb_status = await is_thumbmode(message.chat.id)
 
             if thumb_status:
-                await message.reply_photo(
-                    photo=details["thumb"] if slider else img,
-                    has_spoiler=True,
-                    caption=cap if not slider else _["play_10"].format(
-                        details["title"].title(),
-                        details["duration_min"],
-                    ),
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                )
-            else:
                 await message.reply_text(
                     cap if not slider else _["play_10"].format(
                         details["title"].title(),
@@ -438,16 +428,16 @@ async def play_commnd(
                     reply_markup=InlineKeyboardMarkup(buttons)
                 )
                 return await play_logs(message, streamtype=f"Searched on Youtube")
-            else:
-                buttons = track_markup(
-                    _,
-                    track_id,
-                    message.from_user.id,
-                    "c" if channel else "g",
-                    "f" if fplay else "d",
-                )
-                await mystic.delete()
-            thumb_status = await is_thumbmode(message.chat.id)
+
+            buttons = track_markup(
+                _,
+                track_id,
+                message.from_user.id,
+                "c" if channel else "g",
+                "f" if fplay else "d",
+            )
+
+            await mystic.delete()
 
             if thumb_status:
                 await message.reply_photo(
@@ -467,7 +457,8 @@ async def play_commnd(
                     ),
                     reply_markup=InlineKeyboardMarkup(buttons)
                 )
-                return await play_logs(message, streamtype=f"URL Searched Inline")
+
+            return await play_logs(message, streamtype=f"URL Searched Inline")
 
 @app.on_callback_query(filters.regex("MusicStream") & ~BANNED_USERS)
 @languageCB
