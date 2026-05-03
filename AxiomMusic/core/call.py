@@ -23,9 +23,9 @@ from AxiomMusic.utils.database import (
     remove_active_chat,
     remove_active_video_chat,
     set_loop,
-    is_thumbnail,
-    thumbnail_on,
-    thumbnail_off,
+    is_thumbmode,
+    thumb_on,
+    thumb_off,
 )
 from AxiomMusic.utils.exceptions import AssistantErr
 from AxiomMusic.utils.formatters import check_duration, seconds_to_min, speed_converter
