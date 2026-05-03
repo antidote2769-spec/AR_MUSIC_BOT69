@@ -197,24 +197,19 @@ async def skip_off(chat_id: int):
 # ==========================================
 
 async def is_thumbmode(chat_id: int) -> bool:
-    mode = thumbmode.get(chat_id)
+    user = await thumbdb.find_one({"chat_id": chat_id})
 
-    if mode is None:
-        user = await thumbdb.find_one({"chat_id": chat_id})
+    if not user:
+        thumbmode[chat_id] = True
+        return True
 
-        if not user:
-            thumbmode[chat_id] = True
-            return True
-
-        thumbmode[chat_id] = bool(user["mode"])
-        return bool(user["mode"])
-
+    mode = bool(user["mode"])
+    thumbmode[chat_id] = mode
     return mode
 
 
 async def thumb_on(chat_id: int):
     thumbmode[chat_id] = True
-
     await thumbdb.update_one(
         {"chat_id": chat_id},
         {"$set": {"mode": True}},
@@ -224,7 +219,6 @@ async def thumb_on(chat_id: int):
 
 async def thumb_off(chat_id: int):
     thumbmode[chat_id] = False
-
     await thumbdb.update_one(
         {"chat_id": chat_id},
         {"$set": {"mode": False}},
