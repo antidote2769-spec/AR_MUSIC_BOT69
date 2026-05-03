@@ -76,7 +76,7 @@ def _get_fallback_fonts(size: int):
 # ═══════════════════════════════════════════════════════════════════
 
 W, H = 1280, 720
-BG_COLOR   = (45,  60,  65)
+BG_COLOR = (20, 25, 28)   # darker
 TEXT_WHITE = (255, 255, 255)
 TEXT_GRAY  = (175, 182, 188)
 REQ_COLOR = (255, 215, 0)  
@@ -122,6 +122,29 @@ def _make_bg_v4() -> Image.Image:
         alpha = int(130 * (1 - i / 160))
         vd.rectangle([0, 0, W, H], outline=(0, 0, 0, alpha), width=i)
     base.paste(vignette.filter(ImageFilter.GaussianBlur(45)), (0, 0), vignette)
+
+    # ✨ glass shine overlay
+    shine = Image.new("RGBA", (W, H), (255, 255, 255, 0))
+    sd = ImageDraw.Draw(shine)
+
+    for i in range(0, W, 4):
+        alpha = int(20 * (1 - i / W))
+        sd.line([(i, 0), (i + 200, H)], fill=(255, 255, 255, alpha), width=2)
+
+    shine = shine.filter(ImageFilter.GaussianBlur(25))
+    base.paste(shine, (0, 0), shine)
+
+    # ✨ edge glow
+    glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+
+    for i in range(120, 0, -5):
+        alpha = int(80 * (1 - i / 120))
+        gd.rectangle([0, 0, W, H], outline=(255, 255, 255, alpha), width=i)
+
+    glow = glow.filter(ImageFilter.GaussianBlur(40))
+    base.paste(glow, (0, 0), glow)
+
     return base
 
 
@@ -136,6 +159,16 @@ def _draw_card_border_v4(base: Image.Image, x1, y1, x2, y2, r=28, c_base=(202,21
     d.rounded_rectangle([x1 + 10, y1 + 10, x2 - 10, y2 - 10], radius=max(r - 10, 4), fill=(18, 24, 26, 255))
     for offset, color, bw in [(0, (*c_dark, 255), 5), (2, (*c_base, 255), 3), (4, (255, 255, 255, 180), 2)]:
         d.rounded_rectangle([x1 + offset, y1 + offset, x2 - offset, y2 - offset], radius=max(r - offset, 4), outline=color, width=bw)
+
+    # ✨ outer glow for card
+    for i in range(20, 0, -2):
+        d.rounded_rectangle(
+            [x1 - i, y1 - i, x2 + i, y2 + i],
+            radius=r + i,
+            outline=(255, 255, 255, int(30 * (1 - i / 20))),
+            width=2
+        )
+
     return Image.alpha_composite(base.convert("RGBA"), layer).convert("RGB")
 
 
@@ -241,7 +274,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     safe_name = safe_name.replace("–", "-").replace("—", "-").strip()
 
     if safe_name.lower() in ["none", "", "-", "null"]:
-        safe_name = "Unknown"
+        safe_name = "AxiomUser"
 
     # 🔥 custom color control (yaha change karega tu)
     NAME_COLOR = (255, 255, 255)   # white
