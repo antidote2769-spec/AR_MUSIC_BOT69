@@ -76,7 +76,7 @@ def _get_fallback_fonts(size: int):
 # ═══════════════════════════════════════════════════════════════════
 
 W, H = 1280, 720
-BG_COLOR = (10, 12, 18)
+BG_COLOR   = (45,  60,  65)
 TEXT_WHITE = (255, 255, 255)
 TEXT_GRAY  = (175, 182, 188)
 REQ_COLOR = (255, 215, 0)  
@@ -122,52 +122,6 @@ def _make_bg_v4() -> Image.Image:
         alpha = int(130 * (1 - i / 160))
         vd.rectangle([0, 0, W, H], outline=(0, 0, 0, alpha), width=i)
     base.paste(vignette.filter(ImageFilter.GaussianBlur(45)), (0, 0), vignette)
-
-    # ✨ glass shine overlay
-    shine = Image.new("RGBA", (W, H), (255, 255, 255, 0))
-    sd = ImageDraw.Draw(shine)
-
-    for i in range(0, W, 4):
-        alpha = int(20 * (1 - i / W))
-        sd.line([(i, 0), (i + 200, H)], fill=(255, 255, 255, alpha), width=2)
-
-    shine = shine.filter(ImageFilter.GaussianBlur(25))
-    base.paste(shine, (0, 0), shine)
-
-    # ✨ edge glow
-    glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    gd = ImageDraw.Draw(glow)
-
-    for i in range(120, 0, -5):
-        alpha = int(80 * (1 - i / 120))
-        gd.rectangle([0, 0, W, H], outline=(255, 255, 255, alpha), width=i)
-
-    glow = glow.filter(ImageFilter.GaussianBlur(40))
-    base.paste(glow, (0, 0), glow)
-
-    # ✨ side ambient lights
-    overlay = Image.new("RGBA", (W, H), (0,0,0,0))
-    od = ImageDraw.Draw(overlay)
-
-    # left glow
-    od.ellipse(
-        (-180, 180, 260, 620),
-        fill=(255, 80, 80, 45)
-    )
-
-    # right glow
-    od.ellipse(
-        (1020, 120, 1450, 580),
-        fill=(120, 170, 255, 35)
-    )
-
-    overlay = overlay.filter(ImageFilter.GaussianBlur(120))
-
-    base = Image.alpha_composite(
-        base.convert("RGBA"),
-        overlay
-    ).convert("RGB")
-
     return base
 
 
@@ -182,16 +136,6 @@ def _draw_card_border_v4(base: Image.Image, x1, y1, x2, y2, r=28, c_base=(202,21
     d.rounded_rectangle([x1 + 10, y1 + 10, x2 - 10, y2 - 10], radius=max(r - 10, 4), fill=(18, 24, 26, 255))
     for offset, color, bw in [(0, (*c_dark, 255), 5), (2, (*c_base, 255), 3), (4, (255, 255, 255, 180), 2)]:
         d.rounded_rectangle([x1 + offset, y1 + offset, x2 - offset, y2 - offset], radius=max(r - offset, 4), outline=color, width=bw)
-
-    # ✨ outer glow for card
-    for i in range(20, 0, -2):
-        d.rounded_rectangle(
-            [x1 - i, y1 - i, x2 + i, y2 + i],
-            radius=r + i,
-            outline=(255, 255, 255, int(30 * (1 - i / 20))),
-            width=2
-        )
-
     return Image.alpha_composite(base.convert("RGBA"), layer).convert("RGB")
 
 
@@ -276,51 +220,8 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     base = _make_bg_v4()
     base = _draw_card_border_v4(base, 310, 90, 1060, 545, 28, c_base, c_light, c_dark)
     base = _draw_art_shadow(base, 322, 102, 727, 433, 18, c_base)
-    # 🔥 cinematic glow behind thumbnail
-    glow = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    gd = ImageDraw.Draw(glow)
-
-    for i in range(140, 0, -8):
-        alpha = int(18 * (1 - i / 140))
-
-        gd.rounded_rectangle(
-            [322 - i, 102 - i, 1049 + i, 535 + i],
-            radius=40 + i,
-            fill=(*c_base, alpha)
-        )
-
-    glow = glow.filter(ImageFilter.GaussianBlur(55))
-
-    base = Image.alpha_composite(
-        base.convert("RGBA"),
-        glow
-    ).convert("RGB")
     base = _paste_rounded(base, song_img, 322, 102, 727, 433, 18)
     base = _draw_bar(base, 105, 93, 556, 0.06, c_base, c_light, c_dark)
-    # ✨ glass overlay
-    glass = Image.new("RGBA", (W, H), (0, 0, 0, 0))
-    g = ImageDraw.Draw(glass)
-
-    # main glass
-    g.rounded_rectangle(
-        [310, 90, 1060, 545],
-        radius=30,
-        fill=(255, 255, 255, 10)
-    )
-
-    # top shine
-    g.rounded_rectangle(
-        [320, 100, 1050, 220],
-        radius=25,
-        fill=(255, 255, 255, 20)
-    )
-
-    glass = glass.filter(ImageFilter.GaussianBlur(10))
-
-    base = Image.alpha_composite(
-        base.convert("RGBA"),
-        glass
-    ).convert("RGB")
 
     draw = ImageDraw.Draw(base)
     f_t   = _get_font(FONT_BOLD,   30)
@@ -330,23 +231,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
 
     draw.text((105, 44),  "00:17",                                                  font=f_t,   fill=c_base,     anchor="mm")
     draw.text((105, 598), duration,                                                  font=f_t,   fill=c_base,     anchor="mm")
-    # shadow
-    draw.text(
-        (688, 583),
-        _truncate(draw, title, f_tit, 800),
-        font=f_tit,
-        fill=(0, 0, 0),
-        anchor="mm"
-    )
-
-    # main title
-    draw.text(
-        (685, 580),
-        _truncate(draw, title, f_tit, 800),
-        font=f_tit,
-        fill=TEXT_WHITE,
-        anchor="mm"
-    )
+    draw.text((685, 580), _truncate(draw, title, f_tit, 800),                        font=f_tit, fill=TEXT_WHITE, anchor="mm")
     draw.text((685, 630), _truncate(draw, f"{channel}  |  {views}", f_s, 840),       font=f_s, fill=TEXT_GRAY, anchor="mm")
     safe_name = clean_username(user_name)
 
@@ -356,7 +241,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     safe_name = safe_name.replace("–", "-").replace("—", "-").strip()
 
     if safe_name.lower() in ["none", "", "-", "null"]:
-        safe_name = "AxiomUser"
+        safe_name = "Unknown"
 
     # 🔥 custom color control (yaha change karega tu)
     NAME_COLOR = (255, 255, 255)   # white
