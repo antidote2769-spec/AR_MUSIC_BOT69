@@ -21,6 +21,7 @@ import config
 from AxiomMusic import Apple, Resso, SoundCloud, Spotify, Telegram, YouTube, app
 from AxiomMusic.core.call import Axiomm
 from AxiomMusic.utils import seconds_to_min, time_to_seconds
+from AxiomMusic.utils.database import is_thumbmode
 from AxiomMusic.utils.channelplay import get_channeplayCB
 from AxiomMusic.utils.decorators.language import languageCB
 from AxiomMusic.utils.decorators.play import PlayWrapper
@@ -389,12 +390,20 @@ async def play_commnd(
                 "f" if fplay else "d",
             )
             await mystic.delete()
-            await message.reply_photo(
-                photo=img,
-                has_spoiler=True,
-                caption=cap,
-                reply_markup=InlineKeyboardMarkup(buttons),
-            )
+            thumb_status = await is_thumbmode(message.chat.id)
+
+            if thumb_status:
+                await message.reply_photo(
+                    photo=img,
+                    has_spoiler=True,
+                    caption=cap,
+                    reply_markup=InlineKeyboardMarkup(buttons),
+                )
+            else:
+                await message.reply_text(
+                    cap,
+                    reply_markup=InlineKeyboardMarkup(buttons)
+                )
             return await play_logs(message, streamtype=f"Playlist : {plist_type}")
         else:
             if slider:
@@ -408,14 +417,25 @@ async def play_commnd(
                     "f" if fplay else "d",
                 )
                 await mystic.delete()
+            thumb_status = await is_thumbmode(message.chat.id)
+
+            if thumb_status:
                 await message.reply_photo(
-                    photo=details["thumb"],
+                    photo=details["thumb"] if slider else img,
                     has_spoiler=True,
-                    caption=_["play_10"].format(
+                    caption=cap if not slider else _["play_10"].format(
                         details["title"].title(),
                         details["duration_min"],
                     ),
                     reply_markup=InlineKeyboardMarkup(buttons),
+                )
+            else:
+                await message.reply_text(
+                    cap if not slider else _["play_10"].format(
+                        details["title"].title(),
+                        details["duration_min"],
+                    ),
+                    reply_markup=InlineKeyboardMarkup(buttons)
                 )
                 return await play_logs(message, streamtype=f"Searched on Youtube")
             else:
@@ -427,11 +447,25 @@ async def play_commnd(
                     "f" if fplay else "d",
                 )
                 await mystic.delete()
+            thumb_status = await is_thumbmode(message.chat.id)
+
+            if thumb_status:
                 await message.reply_photo(
-                    photo=img,
+                    photo=details["thumb"] if slider else img,
                     has_spoiler=True,
-                    caption=cap,
+                    caption=cap if not slider else _["play_10"].format(
+                        details["title"].title(),
+                        details["duration_min"],
+                    ),
                     reply_markup=InlineKeyboardMarkup(buttons),
+                )
+            else:
+                await message.reply_text(
+                    cap if not slider else _["play_10"].format(
+                        details["title"].title(),
+                        details["duration_min"],
+                    ),
+                    reply_markup=InlineKeyboardMarkup(buttons)
                 )
                 return await play_logs(message, streamtype=f"URL Searched Inline")
 
@@ -491,17 +525,20 @@ async def play_music(client, CallbackQuery, _):
     video = True if mode == "v" else None
     ffplay = True if fplay == "f" else None
     try:
+        thumb_status = await is_thumbmode(chat_id)
+
+        if not thumb_status:
+            details["thumb"] = None
+
         await stream(
             _,
             mystic,
-            CallbackQuery.from_user.id,
+            user_id,
             details,
             chat_id,
             user_name,
-            CallbackQuery.message.chat.id,
-            video,
+            message.chat.id,
             streamtype="youtube",
-            forceplay=ffplay,
         )
     except Exception as e:
         print(f"Error: {e}")
