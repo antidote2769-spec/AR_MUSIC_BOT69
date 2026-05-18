@@ -95,18 +95,39 @@ def _get_font(path: str, size: int) -> ImageFont.FreeTypeFont:
 
 
 def _random_palette() -> Tuple[Tuple[int, int, int], Tuple[int, int, int], Tuple[int, int, int]]:
-    mode = random.choice(["vivid", "monochrome", "dark", "pastel"])
-    if mode == "vivid":
-        h, s, v = random.random(), random.uniform(0.7, 1.0), random.uniform(0.8, 1.0)
-    elif mode == "monochrome":
-        h, s, v = 0, 0, random.choice([0.1, 0.5, 0.95])
-    elif mode == "dark":
-        h, s, v = random.random(), random.uniform(0.4, 0.8), random.uniform(0.2, 0.4)
-    else:
-        h, s, v = random.random(), random.uniform(0.2, 0.4), random.uniform(0.9, 1.0)
-    base  = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(h, s, v))
-    light = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(h, max(s-0.3, 0), min(v+0.2, 1.0)))
-    dark  = tuple(int(x * 255) for x in colorsys.hsv_to_rgb(h, min(s+0.2, 1.0), max(v-0.3, 0)))
+    # totally random hue
+    h = random.random()
+
+    # wider ranges = more variety
+    s = random.uniform(0.45, 1.0)
+    v = random.uniform(0.55, 1.0)
+
+    # base main color
+    base = tuple(
+        int(x * 255)
+        for x in colorsys.hsv_to_rgb(h, s, v)
+    )
+
+    # lighter neon-ish version
+    light = tuple(
+        int(x * 255)
+        for x in colorsys.hsv_to_rgb(
+            (h + random.uniform(0.03, 0.08)) % 1.0,
+            max(0.25, s - random.uniform(0.15, 0.35)),
+            min(1.0, v + random.uniform(0.12, 0.28))
+        )
+    )
+
+    # darker rich shadow version
+    dark = tuple(
+        int(x * 255)
+        for x in colorsys.hsv_to_rgb(
+            (h - random.uniform(0.03, 0.08)) % 1.0,
+            min(1.0, s + random.uniform(0.05, 0.18)),
+            max(0.18, v - random.uniform(0.28, 0.45))
+        )
+    )
+
     return base, light, dark
 
 
@@ -290,11 +311,18 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     blob_draw = ImageDraw.Draw(blob_layer)
     
     # random cosmic palette
+    accent = (
+        random.randint(40, 255),
+        random.randint(40, 255),
+        random.randint(40, 255),
+        random.randint(25, 45)
+    )
+    
     cosmic_colors = [
-        (88, 40, 180, 70),    # purple
-        (0, 210, 255, 55),    # cyan
-        (255, 70, 170, 45),   # pink
-        (80, 120, 255, 35),   # blue
+        (*c_base, random.randint(45, 85)),
+        (*c_light, random.randint(35, 70)),
+        (*c_dark, random.randint(25, 55)),
+        accent
     ]
     
     random.shuffle(cosmic_colors)
