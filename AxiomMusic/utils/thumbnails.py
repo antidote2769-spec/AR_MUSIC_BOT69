@@ -212,7 +212,7 @@ def _draw_bar(base: Image.Image, bx, by_top, by_bot, progress: float = 0.06,
     d = ImageDraw.Draw(layer)
 
     bw = 8
-    knob_y = by_top + int((by_bot - by_top) * 0.22)
+    knob_y = by_top + int((by_bot - by_top) * progress)
     kr = 14
 
     # inactive line
@@ -265,13 +265,12 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     os.makedirs("cache", exist_ok=True)
 
     # 1) Already generated this session (in-memory, survives even if file missing)
-    if videoid in _thumb_memory and os.path.isfile(_thumb_memory[videoid]):
-        return _thumb_memory[videoid]
-
-    # 2) File already exists on disk from previous call
-    if os.path.isfile(output):
-        _thumb_memory[videoid] = output
-        return output
+    # always regenerate thumbnail (fresh random color every time)
+    if os.path.exists(output):
+        try:
+            os.remove(output)
+        except:
+            pass
 
     # 3) Fetch metadata
     url = f"https://www.youtube.com/watch?v={videoid}"
@@ -419,7 +418,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     base = Image.alpha_composite(base.convert("RGBA"), glass).convert("RGB")
     
     # progress bar
-    base = _draw_bar(base, 105, 93, 556, 0.06, c_base, c_light, c_dark)
+    base = _draw_bar(base, 105, 93, 556, 0.23, c_base, c_light, c_dark)
     draw = ImageDraw.Draw(base)
     f_t   = _get_font(FONT_BOLD,   30)
     f_tit = _get_font(FONT_BOLD,   44)
@@ -432,12 +431,13 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     
     # shadow
     # glow layers
-    for blur in range(10, 0, -2):
+    # title glow
+    for i in range(8, 0, -2):
         draw.text(
             (685, 567),
             title_text,
             font=f_tit,
-            fill=(*c_base, 18),
+            fill=(*c_base, 28),
             anchor="mm"
         )
     
