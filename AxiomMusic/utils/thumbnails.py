@@ -432,7 +432,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     
     # shadow
     draw.text(
-        (688, 548),
+        (688, 570),
         title_text,
         font=f_tit,
         fill=(0, 0, 0),
@@ -441,7 +441,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     
     # main title
     draw.text(
-        (685, 545),
+        (685, 567),
         title_text,
         font=f_tit,
         fill=TEXT_WHITE,
@@ -450,7 +450,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     meta_text = _truncate(draw, f"{channel}  |  {views}", f_s, 840)
     
     draw.text(
-        (687, 601),
+        (687, 623),
         meta_text,
         font=f_s,
         fill=(0, 0, 0),
@@ -458,7 +458,7 @@ async def get_thumb(videoid: str, user_name: str = "Unknown") -> str:
     )
     
     draw.text(
-        (685, 598),
+        (685, 620),
         meta_text,
         font=f_s,
         fill=TEXT_GRAY,
