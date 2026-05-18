@@ -11,12 +11,11 @@ requests
 python-dotenv
 pyyaml
 unidecode
-unidecode
-tgcrypto
-pyrofork
+tgcrypto==1.2.5
+pyrofork==2.3.45
 ffmpeg-python
-py-tgcalls
-ntgcalls
+py-tgcalls==2.1.0
+ntgcalls==1.3.3
 motor
 psutil
 heroku3
