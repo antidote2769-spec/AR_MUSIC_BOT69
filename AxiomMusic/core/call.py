@@ -324,16 +324,21 @@ class Call(PyTgCalls):
 
   
     async def _queue_autoplay_track(self, chat_id: int, last_track: dict, _):
+
         if not last_track:
             return False
 
         settings_chat_id = last_track.get("chat_id", chat_id)
         if not await is_autoplay(settings_chat_id):
+
+        if not last_track or not await is_autoplay(chat_id):
+
             return False
 
         videoid = last_track.get("vidid")
         if not videoid or videoid in ["telegram", "soundcloud"]:
             return False
+
 
         related = None
         try:
@@ -363,6 +368,13 @@ class Call(PyTgCalls):
                     next_id = fallback_id
                     break
 
+
+        related = await YouTube.related_video(videoid, chat_id)
+        if not related:
+            return False
+
+        next_id = related.get("id")
+
         if not next_id or next_id == videoid:
             return False
 
@@ -374,6 +386,10 @@ class Call(PyTgCalls):
             title = related.get("title") or "Autoplay Track"
             duration_min = related.get("duration") or "0:00"
             duration_sec = 0
+
+
+            thumbnail = None
+
             next_vidid = next_id
 
         if str(duration_min) == "None":
@@ -383,7 +399,11 @@ class Call(PyTgCalls):
 
         await put_queue(
             chat_id,
+
             settings_chat_id,
+
+            last_track.get("chat_id", chat_id),
+ 
             f"vid_{next_vidid}",
             title,
             duration_min,
@@ -394,7 +414,11 @@ class Call(PyTgCalls):
         )
         try:
             await app.send_message(
+
                 settings_chat_id,
+
+                last_track.get("chat_id", chat_id),
+
                 (
                     "<b>♬ Autoplay queued next suggestion:</b>\n"
                     f"<blockquote>{title[:60]}</blockquote>"
@@ -432,7 +456,11 @@ class Call(PyTgCalls):
                                         url=f"https://t.me/{app.username}?startgroup=true",
                                     ),
                                     InlineKeyboardButton(
+
                                         "⋞ ᴄʟᴏsє ⋟", callback_data="close"
+
+                                        "⋞ ᴄʟᴏsє ⋟", callback_data="close_message"
+
                                     ),
                                 ],
                                 [
@@ -505,7 +533,11 @@ class Call(PyTgCalls):
             db[chat_id][0]["speed_path"] = None
             db[chat_id][0]["speed"] = 1.0
         video = True if str(streamtype) == "video" else False
+
         thumb_enabled = await is_thumbmode(original_chat_id)
+
+        thumb_enabled = await is_thumbmode(chat_id)
+
 
         if "live_" in queued:
             n, link = await YouTube.video(videoid, True)

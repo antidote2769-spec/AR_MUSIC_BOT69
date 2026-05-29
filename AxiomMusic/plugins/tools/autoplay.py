@@ -5,6 +5,7 @@
 # -----------------------------------------------
 
 from pyrogram import filters
+
 from pyrogram.enums import ChatMemberStatus
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 
@@ -31,6 +32,15 @@ async def can_toggle_autoplay(chat_id: int, user_id: int) -> bool:
     )
 
 
+
+from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
+
+from AxiomMusic import app
+from AxiomMusic.utils.database import autoplay_off, autoplay_on, is_autoplay
+from AxiomMusic.utils.decorators.admins import ActualAdminCB, AdminActual
+from config import BANNED_USERS
+
+
 def autoplay_markup(status: bool):
     toggle_text = "ᴛᴜʀɴ ᴏғғ ❌" if status else "ᴛᴜʀɴ ᴏɴ ✅"
     toggle_state = "off" if status else "on"
@@ -52,9 +62,7 @@ def autoplay_text(status: bool):
     return (
         "<b>♬ ᴀᴜᴛᴏᴘʟᴀʏ sᴇᴛᴛɪɴɢs</b>\n\n"
         f"<b>ᴄᴜʀʀᴇɴᴛ sᴛᴀᴛᴜs:</b> {current}\n\n"
-        "<blockquote>/autoplay kholte hi yeh panel aayega. "
-        "Enable hone par queue empty hote hi bot YouTube se related next "
-        "song fetch karke play karega, VC leave nahi karega.</blockquote>\n\n"
+
         "<b>Quick use:</b> <code>/autoplay on</code> | <code>/autoplay off</code>"
     )
 
@@ -81,6 +89,14 @@ async def autoplay_command(_, message: Message):
     else:
         status = await is_autoplay(chat_id)
 
+
+    )
+
+
+@app.on_message(filters.command("autoplay") & filters.group & ~BANNED_USERS)
+@AdminActual
+async def autoplay_command(_, message: Message, __):
+    status = await is_autoplay(message.chat.id)
     await message.reply_text(
         autoplay_text(status),
         reply_markup=autoplay_markup(status),
@@ -89,6 +105,7 @@ async def autoplay_command(_, message: Message):
 
 
 @app.on_callback_query(filters.regex(r"^autoplay_toggle\|(on|off)$") & ~BANNED_USERS)
+
 async def autoplay_callback(_, callback_query: CallbackQuery):
     state = callback_query.data.split("|", 1)[1]
     chat_id = callback_query.message.chat.id
@@ -98,6 +115,13 @@ async def autoplay_callback(_, callback_query: CallbackQuery):
             "Only admins can change autoplay mode.", show_alert=True
         )
 
+
+@ActualAdminCB
+async def autoplay_callback(_, callback_query: CallbackQuery, __):
+    state = callback_query.data.split("|", 1)[1]
+    chat_id = callback_query.message.chat.id
+
+ 
     if state == "on":
         await autoplay_on(chat_id)
         status = True
