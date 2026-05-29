@@ -20,6 +20,8 @@ from AxiomMusic.core.mongo import mongodb
 authdb = mongodb.adminauth
 authuserdb = mongodb.authuser
 autoenddb = mongodb.autoend
+autoplaydb = mongodb.autoplay
+autoplayhistorydb = mongodb.autoplayhistory
 assdb = mongodb.assistants
 blacklist_chatdb = mongodb.blacklistChat
 blockeddb = mongodb.blockedusers
@@ -41,6 +43,8 @@ active = []
 activevideo = []
 assistantdict = {}
 autoend = {}
+autoplay = {}
+autoplay_history = {}
 count = {}
 channelconnect = {}
 langm = {}
@@ -225,6 +229,69 @@ async def thumb_off(chat_id: int):
         upsert=True
     )
 
+
+
+async def is_autoplay(chat_id: int) -> bool:
+    mode = autoplay.get(chat_id)
+    if mode is not None:
+        return mode
+    user = await autoplaydb.find_one({"chat_id": chat_id})
+    mode = bool(user and user.get("mode", False))
+    autoplay[chat_id] = mode
+    return mode
+
+
+async def autoplay_on(chat_id: int):
+    autoplay[chat_id] = True
+    await autoplaydb.update_one(
+        {"chat_id": chat_id},
+        {"$set": {"mode": True}},
+        upsert=True,
+    )
+
+
+async def autoplay_off(chat_id: int):
+    autoplay[chat_id] = False
+    await autoplaydb.update_one(
+        {"chat_id": chat_id},
+        {"$set": {"mode": False}},
+        upsert=True,
+    )
+
+
+async def ap_history_get(chat_id: int) -> List[str]:
+    cached = autoplay_history.get(chat_id)
+    if cached is not None:
+        return cached
+    data = await autoplayhistorydb.find_one({"chat_id": chat_id})
+    history = data.get("history", []) if data else []
+    autoplay_history[chat_id] = history
+    return history
+
+
+async def ap_history_add(chat_id: int, videoid: str):
+    if not videoid:
+        return
+    history = list(await ap_history_get(chat_id))
+    if videoid in history:
+        history.remove(videoid)
+    history.append(videoid)
+    history = history[-60:]
+    autoplay_history[chat_id] = history
+    await autoplayhistorydb.update_one(
+        {"chat_id": chat_id},
+        {"$set": {"history": history}},
+        upsert=True,
+    )
+
+
+async def ap_history_clear(chat_id: int):
+    autoplay_history[chat_id] = []
+    await autoplayhistorydb.update_one(
+        {"chat_id": chat_id},
+        {"$set": {"history": []}},
+        upsert=True,
+    )
 
 async def get_upvote_count(chat_id: int) -> int:
     mode = count.get(chat_id)
