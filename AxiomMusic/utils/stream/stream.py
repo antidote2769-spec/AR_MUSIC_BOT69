@@ -21,13 +21,24 @@ import config
 from AxiomMusic import Carbon, YouTube, app
 from AxiomMusic.core.call import Axiomm
 from AxiomMusic.misc import db
-from AxiomMusic.utils.database import add_active_video_chat, is_active_chat
+from AxiomMusic.utils.database import add_active_video_chat, is_active_chat, is_thumbmode
 from AxiomMusic.utils.exceptions import AssistantErr
 from AxiomMusic.utils.inline import aq_markup, close_markup, stream_markup
 from AxiomMusic.utils.pastebin import AxiommBin
 from AxiomMusic.utils.stream.queue import put_queue, put_queue_index
 from AxiomMusic.utils.thumbnails import get_thumb
 
+
+async def stream_thumbnail(chat_id: int, videoid: str, user_name: str):
+    if await is_thumbmode(chat_id):
+        return await get_thumb(videoid, user_name)
+    return config.STREAM_IMG_URL
+
+
+async def stream_join_image(chat_id: int, thumbnail):
+    if await is_thumbmode(chat_id):
+        return thumbnail
+    return None
 
 async def stream(
     _,
@@ -101,7 +112,7 @@ async def stream(
                     original_chat_id,
                     file_path,
                     video=status,
-                    image=thumbnail,
+                    image=await stream_join_image(chat_id, thumbnail),
                 )
                 await put_queue(
                     chat_id,
@@ -115,7 +126,7 @@ async def stream(
                     "video" if video else "audio",
                     forceplay=forceplay,
                 )
-                img = await get_thumb(vidid, user_name)
+                img = await stream_thumbnail(chat_id, vidid, user_name)
                 button = stream_markup(_, chat_id)
                 run = await app.send_photo(
                     original_chat_id,
@@ -197,7 +208,7 @@ async def stream(
                 original_chat_id,
                 file_path,
                 video=status,
-                image=thumbnail,
+                image=await stream_join_image(chat_id, thumbnail),
             )
             await put_queue(
                 chat_id,
@@ -211,7 +222,7 @@ async def stream(
                 "video" if video else "audio",
                 forceplay=forceplay,
             )
-            img = await get_thumb(vidid, user_name)
+            img = await stream_thumbnail(chat_id, vidid, user_name)
             button = stream_markup(_, chat_id)
             run = await app.send_photo(
                 original_chat_id,
@@ -368,7 +379,7 @@ async def stream(
                 original_chat_id,
                 file_path,
                 video=status,
-                image=thumbnail if thumbnail else None,
+                image=await stream_join_image(chat_id, thumbnail),
             )
             await put_queue(
                 chat_id,
@@ -382,7 +393,7 @@ async def stream(
                 "video" if video else "audio",
                 forceplay=forceplay,
             )
-            img = await get_thumb(vidid, user_name)
+            img = await stream_thumbnail(chat_id, vidid, user_name)
             button = stream_markup(_, chat_id)
             run = await app.send_photo(
                 original_chat_id,

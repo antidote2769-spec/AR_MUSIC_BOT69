@@ -1,64 +1,68 @@
 from pyrogram import filters
-from pyrogram.types import Message
+from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from AxiomMusic import app
-from AxiomMusic.utils.database import (
-    thumb_on,
-    thumb_off,
-    is_thumbmode,
-)
+from AxiomMusic.utils.database import is_thumbmode, thumb_off, thumb_on
+from AxiomMusic.utils.decorators.admins import ActualAdminCB, AdminActual
+from config import BANNED_USERS
 
 
-@app.on_message(filters.command("thumbnail") & filters.group)
-async def thumbnail_cmd(_, message: Message):
+def thumbnail_markup(status: bool):
+    toggle_text = "ᴅɪsᴀʙʟᴇ ❌" if status else "ᴇɴᴀʙʟᴇ ✅"
+    toggle_state = "off" if status else "on"
+    return InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    toggle_text,
+                    callback_data=f"thumbnail_toggle|{toggle_state}",
+                )
+            ],
+            [InlineKeyboardButton("⋞ ᴄʟᴏsє ⋟", callback_data="close")],
+        ]
+    )
 
-    chat_id = message.chat.id
 
-    # ----------------------------
-    # STATUS CHECK
-    # ----------------------------
-    if len(message.command) < 2:
+def thumbnail_text(status: bool):
+    current = "ᴇɴᴀʙʟᴇᴅ ✅" if status else "ᴅɪsᴀʙʟᴇᴅ ❌"
+    return (
+        "<b>𝚻ʜ꧊‌𝛖ϻβηᴧιℓ 𝚺ᴇᴛᴛɪɴɢs</b>\n\n"
+        f"<b>ᴄᴜʀʀᴇɴᴛ sᴛᴀᴛᴜs:</b> {current}\n\n"
+        "<blockquote>Disabled hone par /play ke baad custom generated "
+        "thumbnail PNG nahi banegi; bot normal streaming card/buttons ke saath "
+        "default image use karega.</blockquote>"
+    )
 
-        status = await is_thumbmode(chat_id)
 
-        return await message.reply_text(
-            f"<b>𝚻ʜ꧊‌𝛖ϻβηᴧιℓ 𝚺ᴛᴀᴛᴜs:</b> {'Enabled ✅' if status else 'Disabled ❌'}\n\n"
-            "Usᴧɢє:\n"
-            "/thumbnail on\n"
-            "/thumbnail off"
-        )
+@app.on_message(filters.command(["thumbnail", "thum"]) & filters.group & ~BANNED_USERS)
+@AdminActual
+async def thumbnail_cmd(_, message: Message, __):
+    status = await is_thumbmode(message.chat.id)
+    await message.reply_text(
+        thumbnail_text(status),
+        reply_markup=thumbnail_markup(status),
+        disable_web_page_preview=True,
+    )
 
-    option = message.command[1].lower()
 
-    # ----------------------------
-    # ENABLE THUMBNAIL
-    # ----------------------------
-    if option == "on":
+@app.on_callback_query(filters.regex(r"^thumbnail_toggle\|(on|off)$") & ~BANNED_USERS)
+@ActualAdminCB
+async def thumbnail_callback(_, callback_query: CallbackQuery, __):
+    state = callback_query.data.split("|", 1)[1]
+    chat_id = callback_query.message.chat.id
 
+    if state == "on":
         await thumb_on(chat_id)
-
-        return await message.reply_text(
-            "<b>𝚻ʜ꧊‌𝛖ϻβηᴧιℓ 𝙴ɴᴀʙʟᴇᴅ ✅</b>"
-        )
-
-    # ----------------------------
-    # DISABLE THUMBNAIL
-    # ----------------------------
-    elif option == "off":
-
-        await thumb_off(chat_id)
-
-        return await message.reply_text(
-            "<b>𝚻ʜ꧊‌𝛖ϻβηᴧιℓ 𝙳ɪsᴀʙʟᴇᴅ ❌</b>"
-        )
-
-    # ----------------------------
-    # INVALID ARGUMENT
-    # ----------------------------
+        status = True
+        alert = "Thumbnail enabled ✅"
     else:
+        await thumb_off(chat_id)
+        status = False
+        alert = "Thumbnail disabled ❌"
 
-        return await message.reply_text(
-            "Usᴧɢє:\n"
-            "/thumbnail on\n"
-            "/thumbnail off"
-        )
+    await callback_query.answer(alert, show_alert=True)
+    await callback_query.edit_message_text(
+        thumbnail_text(status),
+        reply_markup=thumbnail_markup(status),
+        disable_web_page_preview=True,
+    )
