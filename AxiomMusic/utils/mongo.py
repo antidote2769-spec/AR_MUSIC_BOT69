@@ -15,11 +15,8 @@
 
 from typing import Dict, Union
 
-from motor.motor_asyncio import AsyncIOMotorClient as MongoCli
+from AxiomMusic.core.mongo import mongo_client as mongo
 
-from config import MONGO_DB_URI
-
-mongo = MongoCli(MONGO_DB_URI)
 db = mongo.AxiomMusic
 
 coupledb = db.couple

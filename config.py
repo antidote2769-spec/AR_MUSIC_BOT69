@@ -5,6 +5,14 @@ from pyrogram import filters
 
 load_dotenv()
 
+
+def get_env(*keys, default=None):
+    for key in keys:
+        value = getenv(key)
+        if value is not None and value.strip():
+            return value.strip().strip('"').strip("'")
+    return default
+
 # ✅ Time Conversion Utility
 def time_to_seconds(time):
     stringt = str(time)
@@ -15,7 +23,7 @@ API_ID = int(getenv("API_ID", ""))
 API_HASH = getenv("API_HASH", "")
 BOT_TOKEN = getenv("BOT_TOKEN", "")
 COOKIES = getenv("COOKIES", None)
-MONGO_DB_URI = getenv("MONGO_DB_URI", "")
+MONGO_DB_URI = get_env("MONGO_DB_URI", "MONGO_URL", "MONGODB_URI", default="")
 
 # ✅ Duration Config
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 54000))

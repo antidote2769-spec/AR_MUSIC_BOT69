@@ -19,6 +19,7 @@ from pytgcalls.exceptions import NoActiveGroupCall
 import config
 from AxiomMusic import LOGGER, app, userbot
 from AxiomMusic.core.call import Axiomm
+from AxiomMusic.core.mongo import verify_mongo_connection
 from AxiomMusic.misc import sudo
 from AxiomMusic.plugins import ALL_MODULES
 from AxiomMusic.utils.database import get_banned_users, get_gbanned
@@ -35,6 +36,7 @@ async def init():
     ):
         LOGGER(__name__).error("Assistant client variables not defined, exiting...")
         exit()
+    await verify_mongo_connection()
     await sudo()
     try:
         users = await get_gbanned()
