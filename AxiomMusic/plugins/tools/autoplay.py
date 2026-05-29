@@ -1,0 +1,115 @@
+# -----------------------------------------------
+# 🔸 AxiomMusic Project
+# 🔹 Developed & Maintained by: Axiom Bots (https://t.me/axiombots)
+# 📅 Copyright © 2026 – All Rights Reserved
+# -----------------------------------------------
+
+from pyrogram import filters
+from pyrogram.enums import ChatMemberStatus
+from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
+
+from AxiomMusic import app
+from AxiomMusic.misc import SUDOERS
+from AxiomMusic.utils.database import autoplay_off, autoplay_on, is_autoplay
+from config import BANNED_USERS
+
+
+async def can_toggle_autoplay(chat_id: int, user_id: int) -> bool:
+    if user_id in SUDOERS:
+        return True
+    try:
+        member = await app.get_chat_member(chat_id, user_id)
+    except Exception:
+        return True
+    if member.status == ChatMemberStatus.OWNER:
+        return True
+    privileges = getattr(member, "privileges", None)
+    return bool(
+        member.status == ChatMemberStatus.ADMINISTRATOR
+        and privileges
+        and (getattr(privileges, "can_manage_video_chats", False) or getattr(privileges, "can_manage_chat", False))
+    )
+
+
+def autoplay_markup(status: bool):
+    toggle_text = "ᴛᴜʀɴ ᴏғғ ❌" if status else "ᴛᴜʀɴ ᴏɴ ✅"
+    toggle_state = "off" if status else "on"
+    return InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    toggle_text,
+                    callback_data=f"autoplay_toggle|{toggle_state}",
+                )
+            ],
+            [InlineKeyboardButton("⋞ ᴄʟᴏsє ⋟", callback_data="close")],
+        ]
+    )
+
+
+def autoplay_text(status: bool):
+    current = "ᴇɴᴀʙʟᴇᴅ ✅" if status else "ᴅɪsᴀʙʟᴇᴅ ❌"
+    return (
+        "<b>♬ ᴀᴜᴛᴏᴘʟᴀʏ sᴇᴛᴛɪɴɢs</b>\n\n"
+        f"<b>ᴄᴜʀʀᴇɴᴛ sᴛᴀᴛᴜs:</b> {current}\n\n"
+        "<blockquote>/autoplay kholte hi yeh panel aayega. "
+        "Enable hone par queue empty hote hi bot YouTube se related next "
+        "song fetch karke play karega, VC leave nahi karega.</blockquote>\n\n"
+        "<b>Quick use:</b> <code>/autoplay on</code> | <code>/autoplay off</code>"
+    )
+
+
+@app.on_message(
+    filters.command(["autoplay", "aplay"], prefixes=["/", "!", "."])
+    & filters.group
+    & ~BANNED_USERS
+)
+async def autoplay_command(_, message: Message):
+    chat_id = message.chat.id
+    requested_state = message.command[1].lower() if len(message.command) > 1 else None
+
+    if requested_state in ["on", "enable", "enabled"]:
+        if not await can_toggle_autoplay(chat_id, message.from_user.id):
+            return await message.reply_text("<b>Only admins can change autoplay mode.</b>")
+        await autoplay_on(chat_id)
+        status = True
+    elif requested_state in ["off", "disable", "disabled"]:
+        if not await can_toggle_autoplay(chat_id, message.from_user.id):
+            return await message.reply_text("<b>Only admins can change autoplay mode.</b>")
+        await autoplay_off(chat_id)
+        status = False
+    else:
+        status = await is_autoplay(chat_id)
+
+    await message.reply_text(
+        autoplay_text(status),
+        reply_markup=autoplay_markup(status),
+        disable_web_page_preview=True,
+    )
+
+
+@app.on_callback_query(filters.regex(r"^autoplay_toggle\|(on|off)$") & ~BANNED_USERS)
+async def autoplay_callback(_, callback_query: CallbackQuery):
+    state = callback_query.data.split("|", 1)[1]
+    chat_id = callback_query.message.chat.id
+
+    if not await can_toggle_autoplay(chat_id, callback_query.from_user.id):
+        return await callback_query.answer(
+            "Only admins can change autoplay mode.", show_alert=True
+        )
+
+    if state == "on":
+        await autoplay_on(chat_id)
+        status = True
+        alert = "Autoplay enabled ✅"
+    else:
+        await autoplay_off(chat_id)
+        status = False
+        alert = "Autoplay disabled ❌"
+
+    await callback_query.answer(alert, show_alert=True)
+    await callback_query.edit_message_text(
+        autoplay_text(status),
+        reply_markup=autoplay_markup(status),
+        disable_web_page_preview=True,
+    )
