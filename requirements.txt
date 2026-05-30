@@ -15,6 +15,7 @@ unidecode
 unidecode
 tgcrypto
 pyrofork
+pyrotgfork
 ffmpeg-python
 py-tgcalls
 ntgcalls
