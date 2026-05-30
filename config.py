@@ -19,11 +19,11 @@ def time_to_seconds(time):
     return sum(int(x) * 60**i for i, x in enumerate(reversed(stringt.split(":"))))
 
 # ✅ Basic Config
-API_ID = int(getenv("API_ID", ""))
-API_HASH = getenv("API_HASH", "")
+API_ID = int(getenv("API_ID", "39930006"))
+API_HASH = getenv("API_HASH", "0c1afd87f1a69d0e9a8b06b779480f51")
 BOT_TOKEN = getenv("BOT_TOKEN", "")
 COOKIES = getenv("COOKIES", None)
-MONGO_DB_URI = get_env("MONGO_DB_URI", "MONGO_URL", "MONGODB_URI", default="")
+MONGO_DB_URI = get_env("MONGO_DB_URI", "MONGO_URL", "MONGODB_URI", default="mongodb+srv://saranjaat9694:saranjaat435@cluster0.ofptc9e.mongodb.net/?appName=Cluster0")
 
 # ✅ Duration Config
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 54000))
