@@ -14,12 +14,13 @@
 
 import random
 import asyncio
+import re
 import config
 from pyrogram import filters
 from time import time, strftime, gmtime
 from pyrogram import __version__ as pver
 from pyrogram.types import InputMediaVideo, InputMediaPhoto
-from pyrogram.enums import ChatType
+from pyrogram.enums import ChatMemberStatus, ChatType
 from pyrogram.types import WebAppInfo
 from pyrogram.errors import MessageNotModified
 from pyrogram.types import (
@@ -30,19 +31,26 @@ from pyrogram.types import (
 )
 
 from AxiomMusic import app
+from AxiomMusic.misc import SUDOERS
 from AxiomMusic.utils.database import (
     add_nonadmin_chat,
+    autoplay_off,
+    autoplay_on,
     get_authuser,
     get_authuser_names,
     get_playmode,
     get_playtype,
     get_upvote_count,
+    is_autoplay,
     is_nonadmin_chat,
     is_skipmode,
+    is_thumbmode,
     remove_nonadmin_chat,
     set_playmode,
     set_playtype,
     set_upvotes,
+    thumb_off,
+    thumb_on,
     skip_off,
     skip_on,
 )
@@ -62,6 +70,155 @@ Axiomm_PIC = [
     "https://files.catbox.moe/m4fx24.jpg",
     "https://files.catbox.moe/m4fx24.jpg",
 ]
+
+
+TOGGLE_COMMAND_RE = re.compile(
+    r"^[!/.](?P<command>autoplay|aplay|thumbnail|thumb|thum)(?:@\w+)?"
+    r"(?:\s+(?P<state>on|off|enable|disable|enabled|disabled))?\s*$",
+    re.IGNORECASE,
+)
+
+
+def toggle_command_filter(_, __, message):
+    text = message.text or message.caption or ""
+    return bool(TOGGLE_COMMAND_RE.match(text))
+
+
+def toggle_state_from_message(message: Message):
+    text = message.text or message.caption or ""
+    match = TOGGLE_COMMAND_RE.match(text)
+    if not match:
+        return None, None
+    return match.group("command").lower(), (match.group("state") or "").lower() or None
+
+
+async def can_toggle_feature(chat_id: int, user_id: int) -> bool:
+    try:
+        if user_id in SUDOERS:
+            return True
+    except Exception:
+        pass
+    try:
+        member = await app.get_chat_member(chat_id, user_id)
+    except Exception:
+        return True
+    if member.status == ChatMemberStatus.OWNER:
+        return True
+    privileges = getattr(member, "privileges", None)
+    return bool(
+        member.status == ChatMemberStatus.ADMINISTRATOR
+        and privileges
+        and (
+            getattr(privileges, "can_manage_video_chats", False)
+            or getattr(privileges, "can_manage_chat", False)
+        )
+    )
+
+
+def feature_markup(feature: str, status: bool):
+    callback_prefix = "autoplay_toggle" if feature == "autoplay" else "thumbnail_toggle"
+    toggle_text = "ᴛᴜʀɴ ᴏғғ ❌" if status else "ᴛᴜʀɴ ᴏɴ ✅"
+    toggle_state = "off" if status else "on"
+    return InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    toggle_text,
+                    callback_data=f"{callback_prefix}|{toggle_state}",
+                )
+            ],
+            [InlineKeyboardButton("⋞ ᴄʟᴏsє ⋟", callback_data="close")],
+        ]
+    )
+
+
+def autoplay_panel_text(status: bool):
+    current = "ᴇɴᴀʙʟᴇᴅ ✅" if status else "ᴅɪsᴀʙʟᴇᴅ ❌"
+    return (
+        "<b>♬ ᴀᴜᴛᴏᴘʟᴀʏ sᴇᴛᴛɪɴɢs</b>\n\n"
+        f"<b>ᴄᴜʀʀᴇɴᴛ sᴛᴀᴛᴜs:</b> {current}\n\n"
+        "<blockquote>Enable hone par queue empty hote hi bot YouTube se related "
+        "next song fetch karke play karega.</blockquote>\n\n"
+        "<b>Quick use:</b> <code>/autoplay on</code> | <code>/autoplay off</code>"
+    )
+
+
+def thumbnail_panel_text(status: bool):
+    current = "ᴇɴᴀʙʟᴇᴅ ✅" if status else "ᴅɪsᴀʙʟᴇᴅ ❌"
+    return (
+        "<b>𝚻ʜ꧊‌𝛖ϻβηᴧιℓ 𝚺ᴇᴛᴛɪɴɢs</b>\n\n"
+        f"<b>ᴄᴜʀʀᴇɴᴛ sᴛᴀᴛᴜs:</b> {current}\n\n"
+        "<blockquote>Disabled hone par custom generated thumbnail PNG nahi "
+        "banegi; default stream image use hogi.</blockquote>\n\n"
+        "<b>Quick use:</b> <code>/thumb on</code> | <code>/thumb off</code>"
+    )
+
+
+@app.on_message(filters.create(toggle_command_filter) & filters.group & ~BANNED_USERS, group=-1)
+async def autoplay_thumbnail_toggle_command(_, message: Message):
+    if not message.from_user:
+        return await message.reply_text("<b>Please use this command from a user account.</b>")
+
+    command, state = toggle_state_from_message(message)
+    if not command:
+        return
+
+    is_auto_command = command in ["autoplay", "aplay"]
+    feature = "autoplay" if is_auto_command else "thumbnail"
+    chat_id = message.chat.id
+
+    if state in ["on", "enable", "enabled", "off", "disable", "disabled"]:
+        if not await can_toggle_feature(chat_id, message.from_user.id):
+            return await message.reply_text(f"<b>Only admins can change {feature} mode.</b>")
+        enable = state in ["on", "enable", "enabled"]
+        if is_auto_command:
+            await autoplay_on(chat_id) if enable else await autoplay_off(chat_id)
+        else:
+            await thumb_on(chat_id) if enable else await thumb_off(chat_id)
+        status = enable
+    else:
+        status = await is_autoplay(chat_id) if is_auto_command else await is_thumbmode(chat_id)
+
+    await message.reply_text(
+        autoplay_panel_text(status) if is_auto_command else thumbnail_panel_text(status),
+        reply_markup=feature_markup(feature, status),
+        disable_web_page_preview=True,
+    )
+
+
+@app.on_callback_query(filters.regex(r"^(autoplay_toggle|thumbnail_toggle)\|(on|off)$") & ~BANNED_USERS, group=-1)
+async def autoplay_thumbnail_toggle_callback(_, callback_query: CallbackQuery):
+    feature, state = callback_query.data.split("|", 1)
+    is_auto_callback = feature == "autoplay_toggle"
+    chat_id = callback_query.message.chat.id
+
+    if not await can_toggle_feature(chat_id, callback_query.from_user.id):
+        label = "autoplay" if is_auto_callback else "thumbnail"
+        return await callback_query.answer(
+            f"Only admins can change {label} mode.", show_alert=True
+        )
+
+    enable = state == "on"
+    if is_auto_callback:
+        await autoplay_on(chat_id) if enable else await autoplay_off(chat_id)
+        label = "Autoplay"
+        text = autoplay_panel_text(enable)
+        markup = feature_markup("autoplay", enable)
+    else:
+        await thumb_on(chat_id) if enable else await thumb_off(chat_id)
+        label = "Thumbnail"
+        text = thumbnail_panel_text(enable)
+        markup = feature_markup("thumbnail", enable)
+
+    await callback_query.answer(
+        f"{label} {'enabled ✅' if enable else 'disabled ❌'}",
+        show_alert=True,
+    )
+    await callback_query.edit_message_text(
+        text,
+        reply_markup=markup,
+        disable_web_page_preview=True,
+    )
 
 
 @app.on_message(

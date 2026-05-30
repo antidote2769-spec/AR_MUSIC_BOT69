@@ -112,7 +112,20 @@ async def stream(
                     original_chat_id,
                     file_path,
                     video=status,
+
                     image=await stream_join_image(original_chat_id, thumbnail),
+
+
+                    image=await stream_join_image(original_chat_id, thumbnail),
+
+
+                    image=await stream_join_image(original_chat_id, thumbnail),
+
+                    image=await stream_join_image(original_chat_id, thumbnail),
+
+                    image=await stream_join_image(chat_id, thumbnail),
+
+
                 )
                 await put_queue(
                     chat_id,
@@ -126,7 +139,21 @@ async def stream(
                     "video" if video else "audio",
                     forceplay=forceplay,
                 )
+
                 img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+
+                img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+
+                img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+                img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+                img = await stream_thumbnail(chat_id, vidid, user_name)
+
+
+
                 button = stream_markup(_, chat_id)
                 run = await app.send_photo(
                     original_chat_id,
@@ -209,6 +236,14 @@ async def stream(
                 file_path,
                 video=status,
                 image=await stream_join_image(original_chat_id, thumbnail),
+
+
+
+
+                image=await stream_join_image(original_chat_id, thumbnail),
+
+                image=await stream_join_image(chat_id, thumbnail),
+
             )
             await put_queue(
                 chat_id,
@@ -223,6 +258,20 @@ async def stream(
                 forceplay=forceplay,
             )
             img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+
+            img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+
+            img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+
+            img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+            img = await stream_thumbnail(chat_id, vidid, user_name)
+
+
+
             button = stream_markup(_, chat_id)
             run = await app.send_photo(
                 original_chat_id,
@@ -379,7 +428,20 @@ async def stream(
                 original_chat_id,
                 file_path,
                 video=status,
+
                 image=await stream_join_image(original_chat_id, thumbnail),
+
+
+                image=await stream_join_image(original_chat_id, thumbnail),
+
+
+                image=await stream_join_image(original_chat_id, thumbnail),
+
+                image=await stream_join_image(original_chat_id, thumbnail),
+
+                image=await stream_join_image(chat_id, thumbnail),
+
+
             )
             await put_queue(
                 chat_id,
@@ -393,7 +455,23 @@ async def stream(
                 "video" if video else "audio",
                 forceplay=forceplay,
             )
+
             img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+
+            img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+            
+            img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+
+            img = await stream_thumbnail(original_chat_id, vidid, user_name)
+
+            img = await stream_thumbnail(chat_id, vidid, user_name)
+
+
+
+
             button = stream_markup(_, chat_id)
             run = await app.send_photo(
                 original_chat_id,

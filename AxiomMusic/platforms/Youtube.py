@@ -458,7 +458,7 @@ class YouTubeAPI:
             # ── Shruti API Fallback ────────────────────────────────────────
             logger.warning(f"Primary API failed for audio {vid_id}, trying Shruti fallback...")
             try:
-                SHRUTI_URL = "https://shrutibots.site"
+                SHRUTI_URL = "https://api.shrutibots.site"
                 filepath = os.path.join("downloads", f"{vid_id}.mp3")
                 if os.path.exists(filepath):
                     return filepath
@@ -639,7 +639,7 @@ class YouTubeAPI:
             # ── Shruti API Fallback ────────────────────────────────────────
             logger.warning(f"Primary API failed for video {vid_id}, trying Shruti fallback...")
             try:
-                SHRUTI_URL = "https://shrutibots.site"
+                SHRUTI_URL = "https://api.shrutibots.site"
                 filepath = os.path.join("downloads", f"{vid_id}.mp4")
                 if os.path.exists(filepath):
                     return filepath

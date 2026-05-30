@@ -227,6 +227,18 @@ async def is_thumbmode(chat_id: int) -> bool:
     thumbmode[chat_id] = mode
     return mode
 
+async def is_thumbmode(chat_id: int) -> bool:
+    user = await thumbdb.find_one({"chat_id": chat_id})
+
+    if not user:
+        thumbmode[chat_id] = False
+        return False
+
+    mode = bool(user["mode"])
+    thumbmode[chat_id] = mode
+    return mode
+
+
 
 async def thumb_on(chat_id: int):
     thumbmode[chat_id] = True
@@ -250,9 +262,15 @@ async def thumb_off(chat_id: int):
 async def is_autoplay(chat_id: int) -> bool:
     mode = autoplay.get(chat_id)
     if mode is not None:
+
         return _bool_mode(mode, default=False)
     user = await autoplaydb.find_one({"chat_id": chat_id})
     mode = _bool_mode(user.get("mode") if user else None, default=False)
+
+        return mode
+    user = await autoplaydb.find_one({"chat_id": chat_id})
+    mode = bool(user and user.get("mode", False))
+
     autoplay[chat_id] = mode
     return mode
 
