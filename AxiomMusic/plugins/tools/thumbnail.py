@@ -25,7 +25,6 @@ async def can_toggle_thumbnail(chat_id: int, user_id: int) -> bool:
     )
 
 
-
 def thumbnail_markup(status: bool):
     toggle_text = "ᴅɪsᴀʙʟᴇ ❌" if status else "ᴇɴᴀʙʟᴇ ✅"
     toggle_state = "off" if status else "on"
@@ -142,6 +141,7 @@ async def thumbnail_cmd(_, message: Message):
     if requested_state in ["on", "enable", "enabled"]:
         if not await can_toggle_thumbnail(chat_id, message.from_user.id):
             return await message.reply_text("<b>Only admins can change thumbnail mode.</b>")
+
         await thumb_on(chat_id)
         status = True
     elif requested_state in ["off", "disable", "disabled"]:
@@ -172,8 +172,7 @@ async def thumbnail_callback(_, callback_query: CallbackQuery):
     if state == "on":
         await thumb_on(chat_id)
         status = True
-        "default image use karega.</blockquote>"
-    )
+
 
 
 @app.on_message(filters.command(["thumbnail", "thum"]) & filters.group & ~BANNED_USERS)
@@ -196,6 +195,7 @@ async def thumbnail_callback(_, callback_query: CallbackQuery, __):
     if state == "on":
         await thumb_on(chat_id)
         status = True
+
         alert = "Thumbnail enabled ✅"
     else:
         await thumb_off(chat_id)

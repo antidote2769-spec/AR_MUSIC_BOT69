@@ -33,13 +33,13 @@ async def can_toggle_autoplay(chat_id: int, user_id: int) -> bool:
 
 
 
-
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, Message
 
 from AxiomMusic import app
 from AxiomMusic.utils.database import autoplay_off, autoplay_on, is_autoplay
 from AxiomMusic.utils.decorators.admins import ActualAdminCB, AdminActual
 from config import BANNED_USERS
+
 
 def autoplay_markup(status: bool):
     toggle_text = "ᴛᴜʀɴ ᴏғғ ❌" if status else "ᴛᴜʀɴ ᴏɴ ✅"
@@ -68,6 +68,10 @@ def autoplay_text(status: bool):
         "song fetch karke play karega, VC leave nahi karega.</blockquote>\n\n"
 
 
+        "<blockquote>/autoplay kholte hi yeh panel aayega. "
+        "Enable hone par queue empty hote hi bot YouTube se related next "
+        "song fetch karke play karega, VC leave nahi karega.</blockquote>\n\n"
+
 
         "<b>Quick use:</b> <code>/autoplay on</code> | <code>/autoplay off</code>"
     )
@@ -77,7 +81,11 @@ def autoplay_text(status: bool):
 
     filters.regex(r"(?i)^[!/.](autoplay|aplay)(?:@\w+)?(?:\s+(on|off|enable|disable|enabled|disabled))?\s*$")
 
+
+    filters.regex(r"(?i)^[!/.](autoplay|aplay)(?:@\w+)?(?:\s+(on|off|enable|disable|enabled|disabled))?\s*$")
+
     filters.command(["autoplay", "aplay"], prefixes=["/", "!", ".", ""])
+
     & filters.group
     & ~BANNED_USERS
 )
@@ -89,9 +97,9 @@ async def autoplay_command(_, message: Message):
     chat_id = message.chat.id
     requested_state = message.matches[0].group(2).lower() if message.matches and message.matches[0].group(2) else None
 
+
     chat_id = message.chat.id
     requested_state = message.command[1].lower() if len(message.command) > 1 else None
-
 
     if requested_state in ["on", "enable", "enabled"]:
         if not await can_toggle_autoplay(chat_id, message.from_user.id):
@@ -105,8 +113,6 @@ async def autoplay_command(_, message: Message):
         status = False
     else:
         status = await is_autoplay(chat_id)
-
-
 
 
     )
@@ -127,8 +133,6 @@ async def autoplay_command(_, message: Message, __):
 @app.on_callback_query(filters.regex(r"^autoplay_toggle\|(on|off)$") & ~BANNED_USERS)
 
 
-
-
 async def autoplay_callback(_, callback_query: CallbackQuery):
     state = callback_query.data.split("|", 1)[1]
     chat_id = callback_query.message.chat.id
@@ -139,14 +143,11 @@ async def autoplay_callback(_, callback_query: CallbackQuery):
         )
 
 
-
-
 @ActualAdminCB
 async def autoplay_callback(_, callback_query: CallbackQuery, __):
     state = callback_query.data.split("|", 1)[1]
     chat_id = callback_query.message.chat.id
 
- 
 
     if state == "on":
         await autoplay_on(chat_id)
