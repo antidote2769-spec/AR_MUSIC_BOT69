@@ -20,12 +20,6 @@ import config
 from AxiomMusic import app
 
 
-_STYLES = [
-    enums.ButtonStyle.PRIMARY,
-    enums.ButtonStyle.SUCCESS,
-    enums.ButtonStyle.DANGER,
-]
-
 
 def start_panel(_):
     buttons = [
