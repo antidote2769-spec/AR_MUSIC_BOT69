@@ -29,7 +29,6 @@ from AxiomMusic.utils.inline import (
     aq_markup,
     close_markup,
     stream_markup,
-    stream_markup2,
 )
 from AxiomMusic.utils.stream.queue import put_queue, put_queue_index
 # PREMIUM THUMBNAIL IMPORT
