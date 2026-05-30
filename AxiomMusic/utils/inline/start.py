@@ -42,21 +42,21 @@ def private_panel(_):
         [
             InlineKeyboardButton(
                 text=_["S_B_3"],
-                url=f"https://t.me/{app.username}?startgroup=true", style=ButtonStyle.PRIMARY,
+                url=f"https://t.me/{app.username}?startgroup=true", style=ButtonStyle.DANGER,
             ),
         ],
         [
-            InlineKeyboardButton(text=_["S_B_5"], user_id=config.OWNER_ID, style=ButtonStyle.PRIMARY),
-            InlineKeyboardButton(text="📼ʏᴛ-ᴀᴘɪ", callback_data="api_status", style=ButtonStyle.PRIMARY),
+            InlineKeyboardButton(text=_["S_B_5"], user_id=config.OWNER_ID, style=ButtonStyle.SUCCESS),
+            InlineKeyboardButton(text="📼ʏᴛ-ᴀᴘɪ", callback_data="api_status", style=ButtonStyle.SUCCESS),
         ],
         [
             InlineKeyboardButton(
                 text=_["S_B_6"],
-                url=config.SUPPORT_CHAT, style=ButtonStyle.PRIMARY,
+                url=config.SUPPORT_CHAT, style=ButtonStyle.SUCCESS,
             ),
             InlineKeyboardButton(
                 text=_["S_B_2"],
-                url=config.SUPPORT_CHANNEL, style=ButtonStyle.PRIMARY,
+                url=config.SUPPORT_CHANNEL, style=ButtonStyle.SUCCESS,
             ),
         ],
         [
