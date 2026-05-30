@@ -24,13 +24,12 @@ from AxiomMusic.utils.database import (
     remove_active_video_chat,
     set_loop,
     is_thumbmode,
-    thumb_on,
-    thumb_off,
 )
 from AxiomMusic.utils.exceptions import AssistantErr
 from AxiomMusic.utils.formatters import check_duration, seconds_to_min, speed_converter
 from AxiomMusic.utils.inline.play import stream_markup
 from AxiomMusic.utils.stream.autoclear import auto_clean
+from AxiomMusic.utils.stream.autoplay import maybe_refetch_autoplay, queue_autoplay_tracks
 from AxiomMusic.utils.thumbnails import get_thumb
 from strings import get_string
 
@@ -323,6 +322,10 @@ class Call(PyTgCalls):
                 autoend[chat_id] = datetime.now() + timedelta(minutes=1)
 
   
+    async def _queue_autoplay_track(self, chat_id: int, last_track: dict, _):
+        return bool(await queue_autoplay_tracks(chat_id, last_track, limit=1))
+
+
     async def change_stream(self, client: PyTgCalls, chat_id: int):
         await delete_old_message(chat_id)
         check = db.get(chat_id)
@@ -336,33 +339,41 @@ class Call(PyTgCalls):
                 await set_loop(chat_id, loop)
             await auto_clean(popped)
             if not check:
-                await _clear_(chat_id)
-                try:
-                    buttons = InlineKeyboardMarkup(
-                        [
+                queued_autoplay = await self._queue_autoplay_track(chat_id, popped, _)
+                if queued_autoplay:
+                    check = db.get(chat_id)
+                else:
+                    await _clear_(chat_id)
+                    try:
+                        buttons = InlineKeyboardMarkup(
                             [
-                                InlineKeyboardButton(
-                                    "✙ ʌᴅᴅ ϻє вᴧʙʏ ✙",
-                                    url=f"https://t.me/{app.username}?startgroup=true",
-                                ),
-                                InlineKeyboardButton(
-                                    "⋞ ᴄʟᴏsє ⋟", callback_data="close_message"
-                                ),
-                            ],
-                            [
-                                InlineKeyboardButton(text=_["⌯ ᴅєᴠєʟᴏᴘєꝛ​ ⌯"], user_id=config.OWNER_USERNAME
-                                ),
+                                [
+                                    InlineKeyboardButton(
+                                        "✙ ʌᴅᴅ ϻє вᴧʙʏ ✙",
+                                        url=f"https://t.me/{app.username}?startgroup=true",
+                                    ),
+                                    InlineKeyboardButton(
+                                        "⋞ ᴄʟᴏsє ⋟", callback_data="close"
+                                    ),
+                                ],
+                                [
+                                    InlineKeyboardButton(
+                                        text=_["⌯ ᴅєᴠєʟᴏᴘєꝛ​ ⌯"],
+                                        user_id=config.OWNER_USERNAME,
+                                    ),
+                                ],
                             ]
-                        ]
-                    )
-                    await app.send_message(
-                        chat_id,
-                        "<b>🎵 𝐓ʜᴇ 𝐐ᴜᴇᴜᴇ 𝐇ᴀs 𝐅ɪɴɪsʜᴇᴅ. 𝐔sᴇ /play 𝐓ᴏ 𝐀ᴅᴅ 𝐌ᴏʀᴇ 𝐒ᴏɴɢs!!</b>",
-                        reply_markup=buttons,
-                    )
-                except:
-                    pass
-                return await client.leave_call(chat_id, close=False)
+                        )
+                        await app.send_message(
+                            chat_id,
+                            "<b>🎵 𝐓ʜᴇ 𝐐ᴜᴇᴜᴇ 𝐇ᴀs 𝐅ɪɴɪsʜᴇᴅ. 𝐔sᴇ /play 𝐓ᴏ 𝐀ᴅᴅ 𝐌ᴏʀᴇ 𝐒ᴏɴɢs!!</b>",
+                            reply_markup=buttons,
+                        )
+                    except Exception:
+                        pass
+                    return await client.leave_call(chat_id, close=False)
+            elif popped:
+                await maybe_refetch_autoplay(chat_id, popped)
         except Exception:
             try:
                 await _clear_(chat_id)
@@ -375,7 +386,7 @@ class Call(PyTgCalls):
                                     url=f"https://t.me/{app.username}?startgroup=true",
                                 ),
                                 InlineKeyboardButton(
-                                    "⋞ ᴄʟᴏsє ⋟", callback_data="close_message"
+                                    "⋞ ᴄʟᴏsє ⋟", callback_data="close"
                                 ),
                             ],
                             [
@@ -417,7 +428,7 @@ class Call(PyTgCalls):
             db[chat_id][0]["speed_path"] = None
             db[chat_id][0]["speed"] = 1.0
         video = True if str(streamtype) == "video" else False
-        thumb_enabled = await is_thumbnail(chat_id)
+        thumb_enabled = await is_thumbmode(original_chat_id)
 
         if "live_" in queued:
             n, link = await YouTube.video(videoid, True)
