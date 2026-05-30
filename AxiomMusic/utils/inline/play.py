@@ -92,7 +92,7 @@ def stream_markup_timer(_, chat_id, played, dur):
         InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}"),
     ],
     [
-        InlineKeyboardButton(text=thumb_text, callback_data=f"THUMBTOGGLE|{chat_id}", style=ButtonStyle.DANGER),
+        InlineKeyboardButton(text=thumb_text, callback_data=f"THUMBTOGGLE|{chat_id}")
     ],  # ← ADD COMMA HERE
     [
         InlineKeyboardButton("⪻ -𝟸5s", callback_data="seek_backward_20", style=ButtonStyle.PRIMARY), 
