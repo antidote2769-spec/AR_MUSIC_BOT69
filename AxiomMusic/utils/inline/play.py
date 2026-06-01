@@ -83,7 +83,7 @@ def stream_markup_timer(_, chat_id, played, dur):
             url=f"https://t.me/{app.username}?startgroup=true",
             style=ButtonStyle.SUCCESS,
         )
-    ],
+      ]
     ],
     [
         InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}", style=ButtonStyle.DANGER),
