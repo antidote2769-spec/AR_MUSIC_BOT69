@@ -21,6 +21,7 @@ from AxiomMusic import app
 from pyrogram.enums import ButtonStyle
 from AxiomMusic.utils.stream.thumbnail import get_thumbnail_status
 
+
 def track_markup(_, videoid, user_id, channel, fplay):
     buttons = [
         [
@@ -48,26 +49,38 @@ def stream_markup_timer(_, chat_id, played, dur):
     duration_sec = time_to_seconds(dur)
     percentage = (played_sec / duration_sec) * 100
     ufff = math.floor(percentage)
+    
+    # Determine bar and color based on progress
     if 0 < ufff <= 10:
         bar = "┃┊♡—————————┊┃"
+        bar_style = ButtonStyle.PRIMARY
     elif 10 < ufff < 20:
         bar = "┃┊—♡————————┊┃"
+        bar_style = ButtonStyle.PRIMARY
     elif 20 <= ufff < 30:
         bar = "┃┊——♡———————┊┃"
+        bar_style = ButtonStyle.PRIMARY
     elif 30 <= ufff < 40:
         bar = "┃┊———♡——————┊┃"
+        bar_style = ButtonStyle.PRIMARY
     elif 40 <= ufff < 50:
         bar = "┃┊————♡—————┊┃"
+        bar_style = ButtonStyle.PRIMARY
     elif 50 <= ufff < 60:
         bar = "┃┊—————♡————┊┃"
+        bar_style = ButtonStyle.SUCCESS
     elif 60 <= ufff < 70:
         bar = "┃┊——————♡———┊┃"
+        bar_style = ButtonStyle.SUCCESS
     elif 70 <= ufff < 80:
         bar = "┃┊———————♡——┊┃"
+        bar_style = ButtonStyle.SUCCESS
     elif 80 <= ufff < 95:
         bar = "┃┊————————♡—┊┃"
+        bar_style = ButtonStyle.DANGER
     else:
         bar = "┃┊—————————♡┊┃"
+        bar_style = ButtonStyle.DANGER
 
     thumb_status = get_thumbnail_status(chat_id)
 
@@ -77,27 +90,27 @@ def stream_markup_timer(_, chat_id, played, dur):
         else "🖼 ᴛʜᴜᴍʙɴᴀɪʟ : ᴏғғ"
     )
     buttons = [
-    [
-        InlineKeyboardButton(
-            text=f"{played} {bar} {dur}",
-            url=f"https://t.me/{app.username}?startgroup=true",
-            style=ButtonStyle.SUCCESS,
-        )
-      ]
-    ],
-    [
-        InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}", style=ButtonStyle.DANGER),
-        InlineKeyboardButton(text="II", callback_data=f"ADMIN Pause|{chat_id}", style=ButtonStyle.DANGER),
-        InlineKeyboardButton(text="‣‣I", callback_data=f"ADMIN Skip|{chat_id}", style=ButtonStyle.DANGER), 
-        InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}", style=ButtonStyle.DANGER),
-    ],
-    [
-        InlineKeyboardButton(text=thumb_text, callback_data=f"THUMBTOGGLE|{chat_id}", style=ButtonStyle.PRIMARY),
-    ],  # ← ADD COMMA HERE
-    [
-        InlineKeyboardButton("⪻ -𝟸5s", callback_data="seek_backward_20", style=ButtonStyle.PRIMARY), 
-        InlineKeyboardButton(text="↻", callback_data=f"ADMIN Replay|{chat_id}", style=ButtonStyle.DANGER), 
-        InlineKeyboardButton("+𝟸5s ⪼", callback_data="seek_forward_20", style=ButtonStyle.PRIMARY),
+        [
+            InlineKeyboardButton(
+                text=f"{played} {bar} {dur}",
+                url=f"https://t.me/{app.username}?startgroup=true",
+                style=bar_style,
+            )
+        ],
+        [
+            InlineKeyboardButton(text="▷", callback_data=f"ADMIN Resume|{chat_id}", style=ButtonStyle.DANGER),
+            InlineKeyboardButton(text="II", callback_data=f"ADMIN Pause|{chat_id}", style=ButtonStyle.DANGER),
+            InlineKeyboardButton(text="‣‣I", callback_data=f"ADMIN Skip|{chat_id}", style=ButtonStyle.DANGER),
+            InlineKeyboardButton(text="▢", callback_data=f"ADMIN Stop|{chat_id}", style=ButtonStyle.DANGER),
+        ],
+        [
+            InlineKeyboardButton(text=thumb_text, callback_data=f"THUMBTOGGLE|{chat_id}", style=ButtonStyle.PRIMARY),
+        ],
+        [
+            InlineKeyboardButton("⪻ -𝟸5s", callback_data="seek_backward_20", style=ButtonStyle.PRIMARY),
+            InlineKeyboardButton(text="↻", callback_data=f"ADMIN Replay|{chat_id}", style=ButtonStyle.DANGER),
+            InlineKeyboardButton("+𝟸5s ⪼", callback_data="seek_forward_20", style=ButtonStyle.PRIMARY),
+        ]
     ]
     return buttons
 
