@@ -38,6 +38,16 @@ from AxiomMusic.utils.stream.stream import stream
 from config import BANNED_USERS, lyrical
 
 
+QUERY_PIC = [
+    "https://litter.catbox.moe/mrs3d6.jpg",
+    "https://litter.catbox.moe/d0y8uy.jpg",
+    "https://litter.catbox.moe/0vqtje.jpg",
+    "https://litter.catbox.moe/7eb36m.jpg",
+    "https://litter.catbox.moe/eogdae.jpg",
+    "https://litter.catbox.moe/rjl0ek.jpg",
+]
+
+
 @app.on_message(
     filters.command(
         [
@@ -49,7 +59,8 @@ from config import BANNED_USERS, lyrical
             "vplayforce",
             "cplayforce",
             "cvplayforce",
-        ]
+        ],
+        prefixes=[" ", "&", "*", "/", "!", ".", "", "#", "$", "@"]
     )
     & filters.group
     & ~BANNED_USERS
@@ -67,7 +78,7 @@ async def play_commnd(
     fplay,
 ):
     mystic = await message.reply_photo(
-    photo="https://graph.org/file/8845649629c4d7025c37f-06bc4b7900f7f640e1.jpg",
+    photo=random.choice(QUERY_PIC),
     caption=_["play_2"].format(channel) if channel else _["play_1"]
     )
     plist_id = None
