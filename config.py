@@ -53,7 +53,7 @@ GIT_TOKEN = getenv("GIT_TOKEN", "")  # Only for private repo
 
 # ✅ Support Links
 SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/axiombots")
-SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/axlomm")
+SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/ARnetwork69X")
 
 
 PLAYLIST_ID = "-1003991995988"
