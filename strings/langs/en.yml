@@ -174,7 +174,7 @@ queue_6 : "<blockquote expandable><b>🕚 ᴅυʀᴧᴛɪση : υηᴋησᴡη
 queue_7 : "\n<blockquote expandable><b>✧ ᴄʟɪᴄᴋ ση ʙυᴛᴛση ʙєʟσω ᴛσ ɢєᴛ ᴡʜσʟє ǫυєυєᴅ ʟɪsᴛ. </b></blockquote>"
 queue_8 : "<blockquote expandable><b>✧ {0} ᴘʟᴧʏєʀ\n\n✧ sᴛʀєᴧϻɪηɢ : {1}\n\n✧ sᴛʀєᴧϻ ᴛʏᴘє : {2}\n✧ ʀєǫυєsᴛєᴅ ʙʏ : {3}\n{4} </b></blockquote>"
 
-stream_1 : "<blockquote expandable><b> ~┃┊ 𝛅ᴛʀᴇᴀᴍ 𝐈ɴɪᴛɪᴀᴛᴇᴅ. 𝚺ɴᴊᴏʏ Ꭲʜᴇ 𝐌ᴜsɪᴄ ┊┃~ </b>\n\n<b>➣ Tɪᴛʟᴇ :</b> <a href={0}>{1}</a>\n<b>➣ Dᴜʀᴀᴛɪᴏɴ :</b> {2} ᴍɪɴᴜᴛᴇꜱ\n<b>➣ Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ</b> {3}</blockquote>"
+stream_1 : "<blockquote><b> ~┃┊ 𝛅ᴏɴɪᴄ 𝛅ᴇssɪᴏɴ 𝐈ɴɪᴛɪᴀᴛᴇᴅ | 𝚺ɴᴊᴏʏ Ꭲʜᴇ 𝐌ᴜsɪᴄ ┊┃~  </b></blockquote>\n<blockquote><b>➣ Λᴜsᴛɪᴄ :</b> <a href={0}>{1}</a>\n<b>➣  𝚺ɴᴅᴜʀᴀɴᴄᴇ :</b> {2} ᴍɪɴꜱ\n<b>➣ 𝐈ɴɪᴛɪᴀᴛᴏʀ</b> {3}</blockquote>"
 stream_2 : "<blockquote><b> ~┃┊ 𝐒ᴛʀᴇᴀᴍ 𝐈ɴɪᴛɪᴀᴛᴇᴅ |</b></blockquote>\n<blockquote expandable><b>➣ Sᴛʀᴇᴀᴍ ᴛʏᴘᴇ : ʟɪᴠᴇ sᴛʀᴇᴀᴍ [ᴜʀʟ]\n➣ Rᴇǫᴜᴇsᴛᴇᴅ ʙʏ : {3} </blockquote>\n<blockquote>✧ ᴅєᴠєʟᴏᴘєꝛ​ : <a href='https://t.me/iii_maa7nav_iii/30'>⌯ ϻᴧᴧηᴧᴠ ⌯</a></b></blockquote>"
 
 CLOSE_BUTTON  : "ᴄʟσsє ⌫"
