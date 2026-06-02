@@ -60,7 +60,7 @@ QUERY_PIC = [
             "cplayforce",
             "cvplayforce",
         ],
-        prefixes=["", "&", "*", "/", "!", ".", "#", "$", "@"]
+        prefixes=[" ", "&", "*", "/", "!", ".", "", "#", "$", "@"]
     )
     & filters.group
     & ~BANNED_USERS
