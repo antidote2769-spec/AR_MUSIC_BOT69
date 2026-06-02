@@ -61,8 +61,7 @@ async def getid(client, message):
         disable_web_page_preview=True,
         parse_mode=ParseMode.DEFAULT,
         reply_markup=InlineKeyboardMarkup(
-            [[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close"),
-              InlineKeyboardButton(" ⌯ ᴅєᴠєʟᴏᴘєꝛ​ ⌯ ", url="tg://user?id=7169279112")
+            [[InlineKeyboardButton("ᴄʟᴏsᴇ", callback_data="close")
               ]]
         )
     )
