@@ -137,8 +137,6 @@ def autoplay_panel_text(status: bool):
     return (
         "<b>♬ ᴀᴜᴛᴏᴘʟᴀʏ sᴇᴛᴛɪɴɢs</b>\n\n"
         f"<b>ᴄᴜʀʀᴇɴᴛ sᴛᴀᴛᴜs:</b> {current}\n\n"
-        "<blockquote>Enable hone par queue empty hote hi bot YouTube se related "
-        "next song fetch karke play karega.</blockquote>\n\n"
         "<b>Quick use:</b> <code>/autoplay on</code> | <code>/autoplay off</code>"
     )
 
@@ -148,8 +146,6 @@ def thumbnail_panel_text(status: bool):
     return (
         "<b>𝚻ʜ꧊‌𝛖ϻβηᴧιℓ 𝚺ᴇᴛᴛɪɴɢs</b>\n\n"
         f"<b>ᴄᴜʀʀᴇɴᴛ sᴛᴀᴛᴜs:</b> {current}\n\n"
-        "<blockquote>Disabled hone par custom generated thumbnail PNG nahi "
-        "banegi; default stream image use hogi.</blockquote>\n\n"
         "<b>Quick use:</b> <code>/thumb on</code> | <code>/thumb off</code>"
     )
 
