@@ -142,7 +142,6 @@ async def _do_skip_or_replay(CallbackQuery_or_message, chat_id, _, is_replay=Fal
     reply_to = CallbackQuery_or_message.message
 else:
     reply_to = CallbackQuery_or_message
-
     if "live_" in queued:
         n, link = await YouTube.video(videoid, True)
         if n == 0:
