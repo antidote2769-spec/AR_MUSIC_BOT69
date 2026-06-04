@@ -138,10 +138,8 @@ async def _do_skip_or_replay(CallbackQuery_or_message, chat_id, _, is_replay=Fal
         db[chat_id][0]["speed_path"] = None
         db[chat_id][0]["speed"] = 1.0
 
-    if is_cb and hasattr(CallbackQuery_or_message, "message"):
-    reply_to = CallbackQuery_or_message.message
-else:
-    reply_to = CallbackQuery_or_message
+    reply_to = CallbackQuery_or_message.message if is_cb else CallbackQuery_or_message
+
     if "live_" in queued:
         n, link = await YouTube.video(videoid, True)
         if n == 0:
