@@ -39,12 +39,12 @@ from config import BANNED_USERS, lyrical
 
 
 QUERY_PIC = [
-    "https://litter.catbox.moe/mrs3d6.jpg",
-    "https://litter.catbox.moe/d0y8uy.jpg",
-    "https://litter.catbox.moe/0vqtje.jpg",
-    "https://litter.catbox.moe/7eb36m.jpg",
-    "https://litter.catbox.moe/eogdae.jpg",
-    "https://litter.catbox.moe/rjl0ek.jpg",
+    "https://files.catbox.moe/edgz15.png",
+    "https://files.catbox.moe/d671lf.png",
+    "https://files.catbox.moe/qv0olo.png",
+    "https://files.catbox.moe/g9twgb.png",
+    "https://files.catbox.moe/ons7jc.png",
+    "https://files.catbox.moe/kr4okw.png",
 ]
 
 
