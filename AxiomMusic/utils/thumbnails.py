@@ -263,9 +263,9 @@ async def get_thumb(videoid: str) -> str:
         draw = ImageDraw.Draw(bg)
 
         try:
-            title_font = ImageFont.truetype("AxiomMusic/assets/cfont.ttf", 40)
-            meta_font = ImageFont.truetype("AxiomMusic/assets/f.ttf", 22)
-            time_font = ImageFont.truetype("AxiomMusic/assets/f.ttf", 19)
+            title_font = ImageFont.truetype("AxiomMusic/assets/f.ttf", 40)
+            meta_font = ImageFont.truetype("AxiomMusic/assets/cfont.ttf", 22)
+            time_font = ImageFont.truetype("AxiomMusic/assets/cfont.ttf", 19)
         except OSError:
             title_font = ImageFont.load_default()
             meta_font = title_font
