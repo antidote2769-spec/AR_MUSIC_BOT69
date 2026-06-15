@@ -309,10 +309,6 @@ async def get_thumb(videoid: str) -> str:
         icon_next(draw, sx + gap * 4, icon_y, icon_size, "white")
         icon_heart(draw, sx + gap * 5, icon_y, icon_size, (255, 70, 70))
         icon_headphones(draw, sx + gap * 6, icon_y, icon_size, "white")
-
-        # === SAVE ===
-        bg = bg.convert("RGB")
-        bg.save(cache_path, "PNG", quality=95)
         #=== name ===
         draw.text(
             (start_x + label_w, y),
@@ -324,9 +320,11 @@ async def get_thumb(videoid: str) -> str:
         draw.text((1255, 45), "Dev :- Antidote",                                          font=f_wm,  fill=TEXT_WHITE, anchor="rd")
         base.save(output, "PNG", optimize=True)
 
+        # === SAVE ===
+        bg = bg.convert("RGB")
+        bg.save(cache_path, "PNG", quality=95)
+        
     
-    
-
     except Exception as e:
         import traceback
         traceback.print_exc()
