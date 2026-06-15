@@ -315,15 +315,14 @@ async def get_thumb(videoid: str) -> str:
         bg.save(cache_path, "PNG", quality=95)
         #=== name ===
         draw.text(
-        (start_x + label_w, y),
-        name_text,
-        font=f_req,
-        fill=NAME_COLOR,
-        anchor="lm"
-    )
-    draw.text((1255, 45), "Dev :- ☠︎︎𝙰𝚁_𝚄𝚗𝚔𝚗𝚘𝚠𝚗乂 ☆ ༆@𝓐𝓷☨𝓲𝓭𝓸𝓽𝓮𝟔𝟗▄︻̷ ┻ ═━一")
-
-    base.save(output, "PNG", optimize=True)
+            (start_x + label_w, y),
+            name_text,
+            font=f_req,
+            fill=NAME_COLOR,
+            anchor="lm"
+        )
+        draw.text((1255, 45), "Dev :- Antidote",                                          font=f_wm,  fill=TEXT_WHITE, anchor="rd")
+        base.save(output, "PNG", optimize=True)
 
     
     
