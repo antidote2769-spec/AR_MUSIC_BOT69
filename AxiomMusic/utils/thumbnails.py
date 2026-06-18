@@ -311,47 +311,20 @@ async def get_thumb(videoid: str) -> str:
         icon_headphones(draw, sx + gap * 6, icon_y, icon_size, "white")
         # === DEV CREDIT ===
         try:
-            dev_font = ImageFont.truetype("AxiomMusic/assets/cfont.ttf", 22)
+            dev_font = ImageFont.truetype(
+                "AxiomMusic/assets/cfont.ttf", 22
+            )
         except:
             dev_font = ImageFont.load_default()
-            dev_label = "Dev: "
-            dev_name = "༆@𝓐𝓷☨𝓲𝓭𝓸𝓽𝓮𝟔𝟗▄︻̷ ┻ ═━一"
 
-        try:
-            label_w = int(dev_font.getlength(dev_label))
-            name_w = int(dev_font.getlength(dev_name))
-        except:
-            label_w = 50
-            name_w = 300
+        dev_text = "Dev: Antidote"
 
-        total_w = label_w + name_w
-
-        dev_x = 1280 - total_w - 30
-        dev_y = 720 - 45
-
-       # Shadow
         draw.text(
-            (dev_x + 2, dev_y + 2),
-            dev_label + dev_name,
-            font=dev_font,
-            fill=(0, 0, 0)
-        )
-
-       # Red Dev:
-       draw.text(
-            (dev_x, dev_y),
-            dev_label,
-            font=dev_font,
-            fill=(255, 50, 50)
-        )
-
-       # White Username
-       draw.text(
-            (dev_x + label_w, dev_y),
-            dev_name,
-            font=dev_font,
-            fill=(255, 255, 255)
-        )
+            (950, 675),
+            dev_text,
+            fill=(255, 255, 255),
+            font=dev_font
+    )
         # === SAVE ===
         bg = bg.convert("RGB")
         bg.save(cache_path, "PNG", quality=95)
