@@ -163,50 +163,7 @@ def icon_headphones(draw, x, y, s, color):
     draw.arc([(x + 3, y), (x + s - 3, y + s//2 + 5)], 180, 0, fill=color, width=2)
     draw.ellipse([(x, y + s//2 + 2), (x + s//3, y + s - 2)], fill=color)
     draw.ellipse([(x + s*2//3, y + s//2 + 2), (x + s, y + s - 2)], fill=color)
-# === DEV CREDIT ===
-try:
-    dev_font = ImageFont.truetype("AxiomMusic/assets/cfont.ttf", 22)
-except:
-    dev_font = ImageFont.load_default()
 
-dev_label = "Dev: "
-dev_name = "༆@𝓐𝓷☨𝓲𝓭𝓸𝓽𝓮𝟔𝟗▄︻̷ ┻ ═━一"
-
-try:
-    label_w = int(dev_font.getlength(dev_label))
-    name_w = int(dev_font.getlength(dev_name))
-except:
-    label_w = 50
-    name_w = 300
-
-total_w = label_w + name_w
-
-dev_x = 1280 - total_w - 30
-dev_y = 720 - 45
-
-# Shadow
-draw.text(
-    (dev_x + 2, dev_y + 2),
-    dev_label + dev_name,
-    font=dev_font,
-    fill=(0, 0, 0)
-)
-
-# Red Dev:
-draw.text(
-    (dev_x, dev_y),
-    dev_label,
-    font=dev_font,
-    fill=(255, 50, 50)
-)
-
-# White Username
-draw.text(
-    (dev_x + label_w, dev_y),
-    dev_name,
-    font=dev_font,
-    fill=(255, 255, 255)
-    )
 
 # ===== MAIN =====
 
@@ -352,7 +309,49 @@ async def get_thumb(videoid: str) -> str:
         icon_next(draw, sx + gap * 4, icon_y, icon_size, "white")
         icon_heart(draw, sx + gap * 5, icon_y, icon_size, (255, 70, 70))
         icon_headphones(draw, sx + gap * 6, icon_y, icon_size, "white")
-        
+        # === DEV CREDIT ===
+        try:
+            dev_font = ImageFont.truetype("AxiomMusic/assets/cfont.ttf", 22)
+        except:
+            dev_font = ImageFont.load_default()
+            dev_label = "Dev: "
+            dev_name = "༆@𝓐𝓷☨𝓲𝓭𝓸𝓽𝓮𝟔𝟗▄︻̷ ┻ ═━一"
+
+        try:
+            label_w = int(dev_font.getlength(dev_label))
+            name_w = int(dev_font.getlength(dev_name))
+        except:
+            label_w = 50
+            name_w = 300
+
+        total_w = label_w + name_w
+
+        dev_x = 1280 - total_w - 30
+        dev_y = 720 - 45
+
+       # Shadow
+        draw.text(
+            (dev_x + 2, dev_y + 2),
+            dev_label + dev_name,
+            font=dev_font,
+            fill=(0, 0, 0)
+        )
+
+       # Red Dev:
+       draw.text(
+            (dev_x, dev_y),
+            dev_label,
+            font=dev_font,
+            fill=(255, 50, 50)
+        )
+
+       # White Username
+       draw.text(
+            (dev_x + label_w, dev_y),
+            dev_name,
+            font=dev_font,
+            fill=(255, 255, 255)
+        )
         # === SAVE ===
         bg = bg.convert("RGB")
         bg.save(cache_path, "PNG", quality=95)
