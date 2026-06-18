@@ -317,7 +317,7 @@ async def get_thumb(videoid: str) -> str:
         except:
             dev_font = ImageFont.load_default()
 
-        dev_text = "Dev: ༆@𝓐𝓷☨𝓲𝓭𝓸𝓽𝓮𝟔𝟗▄︻̷ ┻ ═━一"
+        dev_text = "Dev: 𝙰𝚗𝚝𝚒𝚍𝚘𝚝𝚎"
 
         draw.text(
             (950, 675),
