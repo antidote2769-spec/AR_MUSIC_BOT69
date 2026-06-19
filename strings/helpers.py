@@ -47,7 +47,7 @@ HELP_3 = """<blockquote expandable><b><u>⊚ ʙʀσᴧᴅᴄᴧsᴛ ғєᴧᴛυ
 -pin : ᴩɪη ᴛʜє ϻєssᴧɢє<br>
 -pinloud : ᴩɪη + ησᴛɪғʏ ϻєϻʙєʀs<br>
 -user : ʙʀσᴧᴅᴄᴧsᴛ ᴛσ sᴛᴧʀᴛєᴅ υsєʀs<br>
--assistant : sєηᴅ ᴠɪᴧ ϻᴧᴧηᴧᴠɪɪ<br>
+-assistant : sєηᴅ ᴠɪᴧ ✧ ᴧʀ ᴧssɪsᴛᴧηᴛ<br>
 -nobot : ᴅση'ᴛ sєηᴅ ғʀσϻ ʙσᴛ </b></blockquote>
 
 <blockquote expandable><b>⊚ єxᴧϻᴘʟє : <code>/broadcast -user -pin Testing broadcast</code></b></blockquote>
